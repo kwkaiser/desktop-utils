@@ -33,7 +33,7 @@ function create-arch-test-vm () {
         --memory 1024 \
         --cpu host \
         --vcpus=2,maxvcpus=4 \
-        --cdrom /usr/local/vms/isopool/archlinux-2021.06.01-x86_64.iso \
+        --cdrom /usr/local/vms/isopool/arch.iso \
         --disk size=2,format=qcow2,path=/usr/local/vms/vmpool/testvm.qcow2 \
         --network network=devnetwork,mac=00:11:22:33:44:66 
 }
@@ -45,32 +45,38 @@ function destroy-arch-test-vm () {
     qvirsh vol-delete --pool vmpool testvm.qcow2
 }
 
+function create-arch-test-network () {
+    qvirsh net-destroy default
+    qvirsh net-undefine default
+
+    qvirsh net-define ./confs/devnetwork.xml    
+    qvirsh net-start devnetwork
+}
+
+function retrieve-arch-iso () {
+    wget ${1} -O /usr/local/vms/isopool/arch.iso --show-progress
+}
+
 function copy-arch-install-tools () {
     rm -rf "${HOME}/.ssh/known_hosts"
-    rsync -aP '../../install-utils' root@192.168.122.169:/root/
+    rsync -aP '../../arch-utils' root@192.168.122.169:/root/
 }
 
 function script-usage () {
     cat << EOF
 Usage: 
-    -h|help           Display this dialog
-    -p|pools          Destroy and recreate pools      
-    -v|volumes        Destroy and recreate volumes
-    -c|create         Create test vm
-    -d|destroy        Destroy test vm
-    -y|copy           Copy over install-script suite
+    -h|help             Display this dialog
+    -p|pools            Destroy and recreate pools      
+    -n|network          Create development network. 
+    -r|retrieve [link]  Downloads an arch installation iso
+    -c|create           Create test vm
+    -d|destroy          Destroy test vm
+    -y|copy             Copy over install-script suite
 EOF
 }
 
 function parse_args () {
-    if [ "$#" != 1 ];
-    then 
-        echo 'Illegal number of arguments passed'
-        script-usage
-        exit 1
-    fi
-
-    while getopts "hpvcdy" o; do 
+    while getopts "hpvcdnyr:" o; do 
         case "${o}" in 
             h)
                 script-usage; exit 1
@@ -78,18 +84,22 @@ function parse_args () {
             p)
                 create-arch-test-pools
                 ;;
-            v)  
-                create-arch-test-volume
-                ;;
             c)
                 create-arch-test-vm
                 ;;
             d) 
                 destroy-arch-test-vm
                 ;;
+            r)
+                retrieve-arch-iso ${OPTARG}
+                ;;
+            n)
+                create-arch-test-network
+                ;;
             y) 
                 copy-arch-install-tools
                 ;;
+
             ?)
                 script-usage
                 exit 1

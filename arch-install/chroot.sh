@@ -197,7 +197,7 @@ EOF
 function finish-up () {
     print-header 'Cleaning up. Please exit and reboot'
 
-    rm -rf /install-utils
+    rm -rf /arch-utils
 }
 
 

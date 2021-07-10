@@ -197,13 +197,13 @@ function generate-fstab () {
 function run-chroot () {
     print-header 'Executing chroot script'
 
-    cp -r ../../install-utils/ /mnt/install-utils
+    cp -r ../../arch-utils/ /mnt/arch-utils
 
     if [[ ${PREFIX} == '' ]];
     then 
-        arch-chroot /mnt /bin/bash /install-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} 
+        arch-chroot /mnt /bin/bash /arch-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} 
     else 
-        arch-chroot /mnt /bin/bash /install-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} -p ${PREFIX} 
+        arch-chroot /mnt /bin/bash /arch-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} -p ${PREFIX} 
     fi
 }
 
