@@ -139,11 +139,17 @@ function manage-users () {
     print-header 'Updating users'
 
     groupadd sudo
-    useradd ${ACCOUNT}
+    useradd --create-home ${ACCOUNT}
     usermod -aG sudo ${ACCOUNT}
 
     echo "${ACCOUNT}:password" | chpasswd 
     echo "root:${ROOTPASS}" | chpasswd
+}
+
+function update-sudoers () {
+    print-header 'Updating sudoers file'
+
+    sed -i 's/# %sudo/  %sudo/g' /etc/sudoers
 }
 
 function customize-initramfs () {
@@ -194,10 +200,19 @@ EOF
 
 }
 
+function enable-networking () {
+    print-header 'Enabling networking with NetworkManager'
+
+    systemctl enable NetworkManager
+}
+
 function finish-up () {
     print-header 'Cleaning up. Please exit and reboot'
 
-    rm -rf /arch-utils
+    mkdir -p /home/${ACCOUNT}/Documents/
+    mv /arch-utils /home/${ACCOUNT}/Documents/
+
+    chown -R ${ACCOUNT}:${ACCOUNT} /home/${ACCOUNT}/
 }
 
 
@@ -218,6 +233,7 @@ function main () {
     manage-users && step-wait
     customize-initramfs  && step-wait
     create-bootloader && step-wait
+    enable-networking && step-wait
     finish-up
 }
 

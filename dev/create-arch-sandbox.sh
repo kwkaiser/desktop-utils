@@ -24,7 +24,7 @@ function create-arch-test-pools () {
 }
 
 function create-arch-test-vm () {
-    qvirsh vol-create-as --pool vmpool --name testvm.qcow2 --capacity 10G --format qcow2
+    qvirsh vol-create-as --pool vmpool --name testvm.qcow2 --capacity 30G --format qcow2
     virt-install --connect=qemu:///system \
         --name testvm \
         --noautoconsole \

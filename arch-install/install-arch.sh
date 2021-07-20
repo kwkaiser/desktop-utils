@@ -185,7 +185,7 @@ function make-mounts () {
 function base-install () {
     print-header 'Updating mirrors & performing base install'
     # reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-    pacstrap /mnt linux base base-devel btrfs-progs intel-ucode vim sudo
+    pacstrap /mnt linux base base-devel btrfs-progs intel-ucode vim sudo networkmanager
 }
 
 function generate-fstab () {
