@@ -25,7 +25,7 @@ function initialize-args () {
 function parse-args () {
     ORIGINALARGS="$@"
 
-    while getopts "f:anoh" o; do 
+    while getopts "f:a:n:o:h" o; do 
         case "${o}" in 
             f)
                 ISOPATH=${OPTARG}
@@ -53,7 +53,7 @@ function parse-args () {
 }
 
 function check-root () {
-	if [ ${EUID} != 0 ];
+	if [ ${UID} -ne 0 ];
 	then 
 		echo "Run as root; need to mount isos"
 		exit 1
@@ -94,7 +94,21 @@ function copy-template () {
 function make-iso () {
 	print-header 'Creating new windows iso'
 
-	mkisofs -o ${OUTPUTPATH} ./autowindows
+	mkisofs \
+		-iso-level 4 \
+		-l \
+		-R \
+		-UDF \
+		-D \
+		-b boot/etfsboot.com \
+		-no-emul-boot \
+		-boot-load-size 8 \
+		-hide boot.catalog \
+		-eltorito-alt-boot \
+		-eltorito-platform efi \
+		-no-emul-boot \
+		-b efi/microsoft/boot/efisys.bin \
+		-o ${OUTPUTPATH} ./autowindows
 }
 
 function clean-up () {
@@ -107,6 +121,8 @@ function main () {
     check-root
     check-deps
 	initialize-args
+
+	cd ${CURRENTDIR}
 	parse-args "$@"
 
 	if [ -z ${ISOPATH} ];
@@ -115,7 +131,6 @@ function main () {
 		exit 1;
 	fi
 
-	cd ${CURRENTDIR}
 	copy-iso 
 	copy-template 
 	make-iso

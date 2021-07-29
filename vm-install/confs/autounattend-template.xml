@@ -5,7 +5,7 @@ Created using Windows AFG found at:
 
 Installation Notes
 Location: US
-Notes: Enter your comments here...
+Notes: VFIO windows autoinstallation script
 **************************************************-->
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -101,8 +101,8 @@ Notes: Enter your comments here...
 <WillShowUI>Never</WillShowUI>
 </ProductKey>
 <AcceptEula>true</AcceptEula>
-<FullName>ACCOUNT-VAR</FullName>
-<Organization></Organization>
+<FullName>kwkaiser</FullName>
+<Organization>desktop-windows</Organization>
 </UserData>
 </component>
 </settings>
@@ -131,8 +131,8 @@ Notes: Enter your comments here...
 <CEIPEnabled>0</CEIPEnabled>
 </component>
 <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<ComputerName>windowsvm</ComputerName>
-<ProductKey>----</ProductKey>
+<ComputerName>desktop-windows</ComputerName>
+<ProductKey>W269N-WFGWX-YVC9B-4J6C9-T83GX</ProductKey>
 </component>
 </settings>
 <settings pass="oobeSystem">
@@ -143,7 +143,7 @@ Notes: Enter your comments here...
 <PlainText>true</PlainText>
 </Password>
 <Enabled>true</Enabled>
-<Username>kwkaiser</Username>
+<Username>ACCOUNT-VAR</Username>
 </AutoLogon>
 <OOBE>
 <HideEULAPage>true</HideEULAPage>
@@ -162,14 +162,14 @@ Notes: Enter your comments here...
 <Value></Value>
 <PlainText>true</PlainText>
 </Password>
-<Description></Description>
+<Description>Administrator</Description>
 <DisplayName>kwkaiser</DisplayName>
 <Group>Administrators</Group>
 <Name>kwkaiser</Name>
 </LocalAccount>
 </LocalAccounts>
 </UserAccounts>
-<RegisteredOrganization></RegisteredOrganization>
+<RegisteredOrganization>desktop-windows</RegisteredOrganization>
 <RegisteredOwner>kwkaiser</RegisteredOwner>
 <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
 <FirstLogonCommands>
