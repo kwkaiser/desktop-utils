@@ -1,0 +1,5 @@
+##################################################
+# Global configurations: dictate script behavior #
+##################################################
+
+# Monitor n..1: provide monitor count & associated device name
