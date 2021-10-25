@@ -23,3 +23,11 @@ function check-installed () {
         fi
     fi
 }
+
+repeat(){
+	local start=1
+	local end=${1:-80}
+	local str="${2:-=}"
+	local range=$(seq $start $end)
+	for i in $range ; do echo -n "${str}"; done
+}

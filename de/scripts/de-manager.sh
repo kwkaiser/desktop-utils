@@ -121,13 +121,14 @@ function browse-themes () {
 
     ranger ${TMP} --choosefile=${TMP2} 1>&2
 
-    if [[ -d $(cat ${TMP2}) ]];
+    FILE=$(cat ${TMP2})
+    if [[ -d ${FILE} || -z ${FILE} ]];
     then 
-        echo "Must select a background file"
+        echo "Invalid theme selected"
         exit 1
     fi
 
-    THEMEPATH=${DOTFILESDIR}/themes/$(basename $(cat ${TMP2}) )
+    THEMEPATH=${DOTFILESDIR}/themes/$(basename ${FILE}) 
     THEMEPATH=$(echo "${THEMEPATH%%.*}")
 
     rm -rf ${TMP}
@@ -189,6 +190,7 @@ function substitute-colors () {
 }
 
 function dry-run () {
+    clear
     print-header 'Script configs and locations:'
 
     printf "%15s    %15s\n" 'THEMEPATH:' ${THEMEPATH}
@@ -198,11 +200,13 @@ function dry-run () {
     done
 
     print-header 'Colors:'
-    for i in "${!COLORS[@]}"
+    for i in $(seq 1 15);
     do
-        printf "%15s %10s\n" "$(echo $i | tr [a-z] [A-Z]):" ${COLORS[$i]}
+        printf "\033]4;${i};${COLORS[color${i}]}\007"
+        printf "%15s %10s %5b\n" "COLOR${i}:" ${COLORS[color${i}]} "\e[38;5;${i}m$(repeat 10 "\u2588")\e[0m" 
     done
 
+    echo ''
 }
 
 function main () {
