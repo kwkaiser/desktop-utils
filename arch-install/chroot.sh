@@ -206,11 +206,24 @@ function enable-networking () {
     systemctl enable NetworkManager
 }
 
+function update-repos () {
+    print-header 'Updating reposistory mirrorlist'
+
+    reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+}
+
+function configure-administrator () {
+    print-header 'Adding default user to sudo group'
+
+    echo '%sudo	ALL=(ALL) ALL' >> /etc/sudoers
+    usermod -aG sudo ${ACCOUNT}
+}
+
 function finish-up () {
     print-header 'Cleaning up. Please exit and reboot'
 
     mkdir -p /home/${ACCOUNT}/Documents/
-    mv /arch-utils /home/${ACCOUNT}/Documents/
+    mv /desktop-utils /home/${ACCOUNT}/Documents/
 
     chown -R ${ACCOUNT}:${ACCOUNT} /home/${ACCOUNT}/
 }
@@ -234,6 +247,8 @@ function main () {
     customize-initramfs  && step-wait
     create-bootloader && step-wait
     enable-networking && step-wait
+    update-repos && step-wait
+    configure-administrator && step-wait
     finish-up
 }
 

@@ -184,8 +184,11 @@ function make-mounts () {
 
 function base-install () {
     print-header 'Updating mirrors & performing base install'
-    # reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-    pacstrap /mnt linux base base-devel btrfs-progs intel-ucode vim sudo networkmanager
+    echo 'Using reflector script to find best mirrors...'
+    echo 'This can take a little while'
+
+    reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    pacstrap /mnt linux base base-devel btrfs-progs intel-ucode vim sudo networkmanager reflector git
 }
 
 function generate-fstab () {
@@ -197,13 +200,13 @@ function generate-fstab () {
 function run-chroot () {
     print-header 'Executing chroot script'
 
-    cp -r ../../arch-utils/ /mnt/arch-utils
+    cp -r ../../desktop-utils/ /mnt/desktop-utils
 
     if [[ ${PREFIX} == '' ]];
     then 
-        arch-chroot /mnt /bin/bash /arch-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} 
+        arch-chroot /mnt /bin/bash /desktop-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} 
     else 
-        arch-chroot /mnt /bin/bash /arch-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} -p ${PREFIX} 
+        arch-chroot /mnt /bin/bash /desktop-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} -p ${PREFIX} 
     fi
 }
 
