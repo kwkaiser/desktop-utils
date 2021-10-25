@@ -9,3 +9,17 @@ function print-header () {
     seq -s= ${LENGTH}|tr -d '[:digit:]'
     echo ''
 }
+
+function check-installed () {
+    if [[ -z ${1} ]];
+    then 
+        echo 1
+    else
+        if [[ $(pacman -Qs ${1}) ]];
+        then 
+            echo 0
+        else 
+            echo 1
+        fi
+    fi
+}

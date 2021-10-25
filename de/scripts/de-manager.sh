@@ -11,6 +11,7 @@ function script-usage () {
 Script for managing desktop environment
 Usage:
     -h | --help     Print this output
+    -b | --browse   Select a theme through ranger browsing
     -t | --theme    Provide path to specific theme group
     -r | --random   Select random theme from available theme groups
     -d | --dry      Print out variables, but do not apply them
@@ -38,12 +39,19 @@ function parse-args () {
                 ;;
 
             -t | --theme)
-                THEMEPATH=${2-}
 
-                if [[ ! -d ${THEMEPATH} ]];
-                then 
-                    echo 'Invalid theme path provided'
-                    echo "Themes are current stored under ${DOTFILESDIR}/color-collections"
+                if [[ -z ${THEMEPATH} ]];
+                then
+                    THEMEPATH=${2-}
+
+                    if [[ ! -d ${THEMEPATH} ]];
+                    then 
+                        echo 'Invalid theme path provided'
+                        echo "Themes are current stored under ${DOTFILESDIR}/themes"
+                        exit 1
+                    fi
+                else
+                    echo "Conflicting theme selection options"
                     exit 1
                 fi
 
@@ -51,8 +59,25 @@ function parse-args () {
                 ;;
 
             -r | --random)
-                cd ${DOTFILESDIR}
-                THEMEPATH=${DOTFILESDIR}/color-collections/$(ls color-collections | shuf -n 1)
+
+                if [[ -z ${THEMEPATH} ]];
+                then 
+                    get-random-theme 
+                else
+                    echo "Conflicting theme selection options"
+                    exit 1
+                fi
+                ;;
+
+            -b | --browse) 
+
+                if [[ -z ${THEMEPATH} ]];
+                then 
+                    browse-themes
+                else 
+                    echo "Conflicting theme selection options"
+                    exit 1
+                fi
                 ;;
 
             -d | --dry)
@@ -68,6 +93,47 @@ function parse-args () {
         esac
         shift
     done
+}
+
+function get-random-theme () {
+    cd ${DOTFILESDIR}
+    THEMEPATH=${DOTFILESDIR}/themes/$(ls themes | shuf -n 1)
+}
+
+function browse-themes () {
+    if [[ ! $(check-installed ranger) -eq 0 || ! $(check-installed w3m) -eq 0  ]];
+    then 
+        echo "Browsing themes not available without ranger, w3m"
+        echo "To enable browsing functionality, install deps & ensure image preview is set in ~/.config/ranger/rc.conf"
+        exit 1
+    fi
+
+    cd ${DOTFILESDIR}/themes
+    TMP=$(mktemp --dir)
+
+    for i in $(find . -type f -name '*.jpg' -o -name "*.png" ); 
+    do
+        FILE=$(realpath ${i})
+        cp ${FILE} ${TMP}/$(basename $(dirname ${FILE})).$(echo "${FILE#*.}")
+    done
+
+    TMP2=$(mktemp)
+
+    ranger ${TMP} --choosefile=${TMP2} 1>&2
+
+    if [[ -d $(cat ${TMP2}) ]];
+    then 
+        echo "Must select a background file"
+        exit 1
+    fi
+
+    THEMEPATH=${DOTFILESDIR}/themes/$(basename $(cat ${TMP2}) )
+    THEMEPATH=$(echo "${THEMEPATH%%.*}")
+
+    rm -rf ${TMP}
+    rm ${TMP2}
+
+    cd ${CURRENTDIR}
 }
 
 function source-colors () {
@@ -147,16 +213,14 @@ function main () {
     then 
         source-colors 
 
-        if [[ ${DRYRUN} != 'true' ]];
+        if [[ ${DRYRUN} == 'true' ]];
         then 
-            copy-configs
-            substitute-colors
+            dry-run
+            exit 0
         fi
-    fi
-
-    if [[ ${DRYRUN} == 'true' ]];
-    then 
-        dry-run
+    else
+        echo "No theme path provided"
+        exit 1
     fi
 }
 
