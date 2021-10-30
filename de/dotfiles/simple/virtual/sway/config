@@ -1,6 +1,6 @@
-###############
-# BASE CONFIG #
-###############
+########
+# BASE #
+########
 
 set $mod Mod4
 set $terminal foot
@@ -10,20 +10,38 @@ set $down j
 set $up k
 set $right l
 
+font xft:Hack, Regular 11
 floating_modifier $mod normal
 
 gaps inner 10
-gaps outer 10
+gaps outer 0
 
-##########################
-# EXCITING HOTKEY CONFIG #
-##########################
+##########
+# COLORS #
+##########
+
+# class                 border  backg   text       indic    child
+client.focused          color1  color9  foreground color11  color1 
+client.focused_inactive color3  color3  bg         color3   color3
+client.unfocused        color7  color7  foreground color7   color7
+client.urgent           color11 color11 bg         color11  color11
+client.placeholder      #000000 #0c0c0c     #ffffff     #000000   #0c0c0c
+
+###################
+# BORDERS/HEADERS #
+###################
+
+
+
+###################
+# EXCITING HOTKEY #
+###################
 
 bindsym $mod+Shift+d exec rofi -show run
 
-########################
-# BORING HOTKEY CONFIG #
-########################
+#################
+# BORING HOTKEY #
+#################
 
 bindsym $mod+Shift+q kill
 
@@ -39,7 +57,8 @@ bindsym $mod+s layout stacking
 bindsym $mod+e layout toggle split
 
 bindsym $mod+a focus parent
-bindsym $mod+f layout fullscreen
+bindsym $mod+Shift+a focus child
+bindsym $mod+f fullscreen
 bindsym $mod+space focus mode_toggle
 bindsym $mod+Shift+space floating toggle
 
@@ -48,10 +67,10 @@ bindsym $mod+$down focus down
 bindsym $mod+$left focus left
 bindsym $mod+$right focus right 
 
-bindsym $mod+Shift+up focus up
-bindsym $mod+Shift+down focus down
-bindsym $mod+Shift+left focus left 
-bindsym $mod+Shift+right focus right
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$right move right
 
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
@@ -76,11 +95,11 @@ bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
 mode "resize" {
-    bindsym $up resize shrink height 10px
-    bindsym $down resize grow height 10px
+    bindsym $up resize grow height 25px
+    bindsym $down resize shrink height 25px
 
-    bindsym $right resize grow width 10px
-    bindsym $left resize shrink width 10px
+    bindsym $right resize shrink width 25px
+    bindsym $left resize grow width 25px
 
     bindsym Return mode "default"
     bindsym Escape mode "default"
@@ -88,33 +107,10 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-##########
-# COLORS #
-##########
-
-# class                 border  backg text       indic    child
-client.focused          color9  bg    foreground color13  color11
-client.focused_inactive color1  bg    foreground color5   color3
-client.unfocused        color2  bg    foreground color5   color3
-client.urgent           color6  bg    foreground color5   color3
-client.placeholder      #000000 #0c0c0c     #ffffff     #000000   #0c0c0c
-
-client.background       bg
-
 #######
 # BAR #
 #######
 
 bar {
-    position top
-
-    colors {
-        statusline #ffffff
-        background #323232
-        inactive_workspace #32323200 #32323200 #5c5c5c
-    }
+    swaybar_command waybar 
 }
-
-#################
-# OUTPUT CONFIG #
-#################

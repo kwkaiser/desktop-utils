@@ -1,6 +1,8 @@
 
 #! /bin/bash
 
+set -e
+
 ######################################
 # Management for desktop environment #	
 ######################################
@@ -11,24 +13,33 @@ function script-usage () {
 Script for managing desktop environment
 Usage:
     -h | --help     Print this output
-    -b | --browse   Select a theme through ranger browsing
-    -t | --theme    Provide path to specific theme group
-    -r | --random   Select random theme from available theme groups
-    -d | --dry      Print out variables, but do not apply them
+    -b | --browse   Select a desktop environment theme through ranger browsing
+    -t | --theme    Provide a specific path to an environment theme and setup
+    -m | --mode     Override mode (default: 'desktop')
+    -d | --dry      Print out variables, but do not appy theme
 EOF
 }
 
-function initialize-args () {
-    CURRENTDIR=$(dirname $(realpath $0))
-    DOTFILESDIR=$(realpath ${CURRENTDIR}/../dotfiles)
+function check-dependencies () {
+    if [[ ! $(check-installed pip) -eq 0 || ! $(check-installed ranger) -eq 0 || ! $(check-installed rsync) -eq 0 ]];
+    then 
+        echo "This script requires:"
+        echo "  - ranger"
+        echo "  - pip (with pillow installed, locally"
+        echo "  - rsync"
+        exit 1
+    fi
+}
 
-    # Configs and where they belong
-    declare -g -A CONFIGS
-    CONFIGS['sway/config']=${HOME}/.config/sway/config
+function initialize-args () {
+    MODE='desktop'
+    CURRENTDIR=$(dirname $(realpath $0))
+    DOTFILES=$(realpath ${CURRENTDIR}/../dotfiles)
 
     cd ${CURRENTDIR}
     source "./utils.sh"
 }
+
 
 function parse-args () {
         while :; do
@@ -47,7 +58,7 @@ function parse-args () {
                     if [[ ! -d ${THEMEPATH} ]];
                     then 
                         echo 'Invalid theme path provided'
-                        echo "Themes are current stored under ${DOTFILESDIR}/themes"
+                        echo "Themes are current stored under ${DOTFILES}/themes"
                         exit 1
                     fi
                 else
@@ -56,17 +67,6 @@ function parse-args () {
                 fi
 
                 shift
-                ;;
-
-            -r | --random)
-
-                if [[ -z ${THEMEPATH} ]];
-                then 
-                    get-random-theme 
-                else
-                    echo "Conflicting theme selection options"
-                    exit 1
-                fi
                 ;;
 
             -b | --browse) 
@@ -78,6 +78,20 @@ function parse-args () {
                     echo "Conflicting theme selection options"
                     exit 1
                 fi
+                ;;
+
+            -m | --mode)
+                case ${2-} in 
+                    'laptop'|'desktop'|'virtual')
+                        MODE=${2-}
+                        shift
+                        ;;
+
+                    *)
+                        echo 'Invalid mode; specify either laptop, dekstop, or virtual machine'
+                        exit 1
+                        ;;
+                esac
                 ;;
 
             -d | --dry)
@@ -95,51 +109,33 @@ function parse-args () {
     done
 }
 
-function get-random-theme () {
-    cd ${DOTFILESDIR}
-    THEMEPATH=${DOTFILESDIR}/themes/$(ls themes | shuf -n 1)
-}
-
 function browse-themes () {
-    if [[ ! $(check-installed ranger) -eq 0 || ! $(check-installed w3m) -eq 0  ]];
-    then 
-        echo "Browsing themes not available without ranger, w3m"
-        echo "To enable browsing functionality, install deps & ensure image preview is set in ~/.config/ranger/rc.conf"
-        exit 1
-    fi
+    cd ${DOTFILES}
 
-    cd ${DOTFILESDIR}/themes
-    TMP=$(mktemp --dir)
+    TMPDIR=$(mktemp --dir)
 
-    for i in $(find . -type f -name '*.jpg' -o -name "*.png" ); 
-    do
-        FILE=$(realpath ${i})
-        cp ${FILE} ${TMP}/$(basename $(dirname ${FILE})).$(echo "${FILE#*.}")
+    for i in $(find . -maxdepth 2 -type d -name "*${MODE}");
+    do 
+        i=$(realpath ${i})
+        SHOWCASENAME="$(basename $(dirname ${i})).jpg"
+
+        ln -sf ${i}/meta/showcase.jpg ${TMPDIR}/${SHOWCASENAME}
     done
 
-    TMP2=$(mktemp)
+    TMPFILE=$(mktemp)
 
-    ranger ${TMP} --choosefile=${TMP2} 1>&2
+    ranger ${TMPDIR} --choosefile=${TMPFILE} 1>&2
 
-    FILE=$(cat ${TMP2})
-    if [[ -d ${FILE} || -z ${FILE} ]];
-    then 
-        echo "Invalid theme selected"
-        exit 1
-    fi
+    FILE=$(cat ${TMPFILE})
+    THEMEPATH=${DOTFILES}/$(echo "$(basename ${FILE})" | cut -f 1 -d '.')/${MODE}
 
-    THEMEPATH=${DOTFILESDIR}/themes/$(basename ${FILE}) 
-    THEMEPATH=$(echo "${THEMEPATH%%.*}")
-
-    rm -rf ${TMP}
-    rm ${TMP2}
-
-    cd ${CURRENTDIR}
+    rm -rf ${TMPDIR}
+    rm ${TMPFILE}
 }
 
 function source-colors () {
-    cd ${THEMEPATH}
-    source ./colors
+    cd ${THEMEPATH}/meta
+    source ./colors.txt
 
     declare -g -A COLORS
     COLORS['bg']=$background
@@ -164,40 +160,35 @@ function source-colors () {
     export COLORS
 
     cd ${CURRENTDIR}
-
 }
 
 function copy-configs () {
-    for i in "${!CONFIGS[@]}"
-    do
-        if [[ ! -d $(dirname ${CONFIGS[$i]}) ]];
-        then 
-            mkdir -p $(dirname ${CONFIGS[$i]})
-        fi
-
-        cp -r ${DOTFILESDIR}/${i} ${CONFIGS[$i]}
-    done 
+    rsync -aP --exclude="meta" --ignore-times ${THEMEPATH} ${HOME}/.config
 }
 
 function substitute-colors () {
-    for i in "${!CONFIGS[@]}"
-    do
-        for j in "${!COLORS[@]}"
-        do
-            sed -i "s/${j}/${COLORS[${j}]}/g" ${CONFIGS[${i}]}
-        done
+    SUBFILES=$(rsync -aP --dry-run --ignore-times --exclude="meta" ${THEMEPATH} ${HOME}/.config | tail -n +2)
+
+    for i in ${SUBFILES};
+    do  
+        if [[ -f ${HOME}/.config/${i} ]];
+        then 
+            for j in "${!COLORS[@]}"
+            do
+                sed -i "s/${j}/${COLORS[${j}]}/g" ${HOME}/.config/${i}
+            done
+        fi
     done 
 }
 
 function dry-run () {
-    clear
-    print-header 'Script configs and locations:'
+    print-header 'Basics:'
+    printf "%15s %15s" 'THEMEPATH:' ${THEMEPATH}
+    echo ''
 
-    printf "%15s    %15s\n" 'THEMEPATH:' ${THEMEPATH}
-    for i in "${!CONFIGS[@]}"
-    do
-        printf "%15s    %15s\n" "${i}:" ${CONFIGS[$i]}
-    done
+    print-header 'Copied files:'
+
+    rsync -aP --dry-run --exclude="meta" --ignore-times ${THEMEPATH} ${HOME}/.config/
 
     print-header 'Colors:'
     for i in $(seq 1 15);
@@ -209,23 +200,28 @@ function dry-run () {
     echo ''
 }
 
+
 function main () {
     initialize-args "$@"
+    check-dependencies
     parse-args "$@"
 
-    if [[ ! -z ${THEMEPATH} ]];
+    if [[ -z ${THEMEPATH} ]];
     then 
-        source-colors 
-
-        if [[ ${DRYRUN} == 'true' ]];
-        then 
-            dry-run
-            exit 0
-        fi
-    else
-        echo "No theme path provided"
+        echo 'No theme path provided'
         exit 1
     fi
+
+    source-colors
+
+    if [[ ${DRYRUN} == 'true' ]];
+    then 
+        dry-run 
+        exit 1
+    fi
+
+    copy-configs
+    substitute-colors
 }
 
 main "$@"
