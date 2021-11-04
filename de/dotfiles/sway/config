@@ -3,7 +3,7 @@
 ########
 
 set $mod Mod4
-set $terminal foot
+set $terminal kitty
 
 set $left h
 set $down j
@@ -21,17 +21,18 @@ gaps outer 0
 ##########
 
 # class                 border  backg   text       indic    child
-client.focused          color1  color9  foreground color11  color1 
-client.focused_inactive color3  color3  bg         color3   color3
-client.unfocused        color7  color7  foreground color7   color7
-client.urgent           color11 color11 bg         color11  color11
+client.focused          color1  color1  foreground color15  color1
+client.focused_inactive color3  color3  foreground color3   color3
+client.unfocused        color4  color4  foreground color4   color4
+client.urgent           color2  color2  foreground color2   color2
 client.placeholder      #000000 #0c0c0c     #ffffff     #000000   #0c0c0c
 
 ###################
 # BORDERS/HEADERS #
 ###################
 
-
+default_border pixel 5 
+titlebar_border_thickness 1
 
 ###################
 # EXCITING HOTKEY #
@@ -114,3 +115,9 @@ bindsym $mod+r mode "resize"
 bar {
     swaybar_command waybar 
 }
+
+###########
+# OUTPUTS #
+###########
+
+output Virtual-1 pos 0 0 res 1920x1080
