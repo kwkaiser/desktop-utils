@@ -1,12 +1,16 @@
 #! /bin/bash
 
 set -e
+trap 'cleanup' EXIT
+
 
 ######################################
 # Management for desktop environment #	
 ######################################
 
-# Utilities
+#############
+# Utilities #
+#############
 
 function print-header () {
     LENGTH=${#1}
@@ -26,32 +30,21 @@ repeat(){
 	for i in $range ; do echo -n "${str}"; done
 }
 
-function check-installed () {
-    if [[ -z ${1} ]];
-    then 
-        echo 1
-    else
-        if [[ $(pacman -Qs ${1}) ]];
-        then 
-            echo 0
-        else 
-            echo 1
-        fi
-    fi
-}
-
 function check-dependencies () {
-    if [[ ! $(check-installed pip) -eq 0 || ! $(check-installed fzf) -eq 0 || ! $(check-installed rsync) -eq 0 ]];
+    if [[ ! $(command -v fzf) || ! $(command -v rsync) || ! $(command -v timg) ]];
     then 
-        echo "This script requires:"
-        echo "  - ranger"
-        echo "  - pip (with pillow installed, locally"
-        echo "  - rsync"
+        echo 'This script expects three dependencies:'
+        echo '  -rsync'
+        echo '  -fzf'
+        echo '  -timg'
         exit 1
-    fi
+    fi 
 }
 
-# Arg handling
+
+################
+# Arg handling #
+################
 
 function script-usage () {
     cat << EOF
@@ -71,6 +64,11 @@ function initialize-args () {
     export TTY=$(tty)
     export LINES=$(tput lines)
     export COLS=$(tput cols)
+
+    if [[ -f ${HOME}/.config/kitty/kitty.conf ]];
+    then 
+        cp ${HOME}/.config/kitty/kitty.conf /tmp/kitty.tmp
+    fi
 }
 
 function parse-args () {
@@ -101,6 +99,7 @@ function parse-args () {
 
             -i | --interactive) 
                 THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | fzf --ansi --preview 'print-fzf-summary {}')
+                CHOSEN='true'
                 ;; 
 
             -d | --dry)
@@ -136,14 +135,32 @@ function check-args () {
     fi
 }
 
-# Config handling 
+###################
+# Config handling #
+###################
 
 function copy-configs () {
-    print-header 'Copying configurations'
-    rsync -aP --ignore-times ${DOTFILES}/ ${HOME}/.config
+    if [[ "${1}" = "dry" ]];
+    then
+        local output=$(rsync -aP --dry-run --ignore-times --exclude='themes' ${DOTFILES}/ ${HOME}/.config)
+        for line in ${output};
+        do 
+            if [[ ! -d ${HOME}/.config/${line} ]];
+            then 
+                echo ${line}
+            fi
+        done 
+    elif [[ "${1}" = "silent" ]];
+    then 
+        cp ${DOTFILES}/kitty/kitty.conf ${HOME}/.config/kitty/kitty.conf
+    else
+        rsync -aP --ignore-times --exclude='themes' ${DOTFILES}/ ${HOME}/.config
+    fi
 }
 
-# Color and image handling
+############################
+# Color and image handling #
+############################
 
 function source-colors () {
     cd ${THEME}
@@ -170,8 +187,12 @@ function print-colors () {
         local output=${1}
     fi
 
-    # Color list = ~19 characters, fuzz & look for tput cols / 2 - (color list length / 2)
-    local spacer=$(printf "%.0f" $(bc -l <<< "( ${COLS} / 2 ) - (20 / 2) "))
+    if [[ "${2}" = 'centered' ]];
+    then 
+        local spacer=$(printf "%.0f" $(bc -l <<< "( ${COLS} / 2 ) - (20 / 2) "))
+    else 
+        local spacer="8"
+    fi
 
     for i in $(seq 0 15);
     do
@@ -181,9 +202,8 @@ function print-colors () {
 }
 
 function substitute-colors () {
-    print-header 'Substituting colors'
 
-    SUBFILES=$(rsync -aP --dry-run --ignore-times --exclude="meta" ${DOTFILES}/ ${HOME}/.config | tail -n +2)
+    SUBFILES=$(copy-configs 'dry')
 
     for i in ${SUBFILES};
     do  
@@ -191,7 +211,7 @@ function substitute-colors () {
         then 
             for j in "${!COLORS[@]}"
             do
-                sed -i "s/${j}/${COLORS[${j}]}/g" ${HOME}/.config/${i}
+                sed -i "s/\$${j}/${COLORS[${j}]}/g" ${HOME}/.config/${i}
             done
         fi
     done 
@@ -200,17 +220,14 @@ function substitute-colors () {
 function block-print-background () {
     cd ${THEME} 
 
-    local sized_lines=$(printf "%.0f" $(bc -l <<< "${LINES} * (3/4)"))
-    local sized_cols=$(printf "%.0f" $(bc -l <<< "${COLS}"))
-
     if [[ -f ${THEME}/background.jpg ]];
     then 
-        local ending=".jpg"
+        local ext="jpg"
     else 
-        local ending=".png"
+        local ext="png"
     fi
 
-    timg --center -g ${sized_cols}x${sized_lines} ${THEME}/background.jpg 
+    timg --center -p quarter -g ${COLS}x${LINES} ${THEME}/background.${ext}
 }
 
 function print-fzf-summary () {
@@ -219,11 +236,35 @@ function print-fzf-summary () {
     COLS=$(tput cols)
 
     source-colors
-    print-colors ${TTY} 
+    print-colors ${TTY} 'centered'
+    echo ''
     block-print-background
+    copy-configs 'silent'
+    substitute-colors
+    reload-term
 }
 
-# Run utilities
+####################
+# Reload utilities #
+####################
+
+function reload-term () {
+    kill -10 $(pidof kitty)
+}
+
+function cleanup () {
+    if [[ -f /tmp/kitty.tmp && "${CHOSEN}" != 'true' ]];
+    then 
+        cp /tmp/kitty.tmp ${HOME}/.config/kitty/kitty.conf
+    fi
+
+    rm /tmp/kitty.tmp
+    reload-term
+}
+
+#################
+# Run utilities #
+#################
 
 function dry-run () {
     print-header 'Basics:'
@@ -231,11 +272,10 @@ function dry-run () {
     echo ''
 
     print-header 'Copied files:'
-
-    rsync -aP --dry-run --ignore-times ${DOTFILES} ${HOME}/.config/
+    copy-configs 'dry'
 
     print-header 'Colors:'
-    print-colors
+    print-colors 
 
     print-header 'Background'
     block-print-background
@@ -244,10 +284,10 @@ function dry-run () {
 }
 
 function main () {
-    check-dependencies
     initialize-args "$@"
     parse-args "$@"
     check-args
+    check-dependencies
 
     source-colors
 
@@ -257,13 +297,18 @@ function main () {
         exit 1
     fi
 
+    print-header 'Copying configs'
     copy-configs
+
+    print-header 'Substituting colors'
     substitute-colors
+
+    print-header 'Reloading configs'
+    reload-term 
 }
 
 export -f print-header 
 export -f repeat 
-export -f check-installed
 export -f check-dependencies
 export -f script-usage 
 export -f initialize-args 
@@ -276,6 +321,7 @@ export -f substitute-colors
 export -f block-print-background 
 export -f print-fzf-summary 
 export -f dry-run
+export -f reload-term
 
 main "$@"
 
