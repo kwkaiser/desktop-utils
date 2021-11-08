@@ -3,7 +3,6 @@
 set -e
 trap 'cleanup' EXIT
 
-
 ######################################
 # Management for desktop environment #	
 ######################################
@@ -13,12 +12,12 @@ trap 'cleanup' EXIT
 #############
 
 function print-header () {
-    LENGTH=${#1}
+    local length=${#1}
 
     echo ''
-    seq -s= ${LENGTH}|tr -d '[:digit:]'
+    seq -s= ${length}|tr -d '[:digit:]'
     echo ${1}
-    seq -s= ${LENGTH}|tr -d '[:digit:]'
+    seq -s= ${length}|tr -d '[:digit:]'
     echo ''
 }
 
@@ -41,7 +40,6 @@ function check-dependencies () {
     fi 
 }
 
-
 ################
 # Arg handling #
 ################
@@ -55,6 +53,7 @@ Usage:
     -f | --files        Override dotfiles path (default: ~/dotfiles)
     -i | --interactive  Select a desktop environment theme through ranger browsing
     -t | --theme        Provide a specific path to an environment theme and setup
+    -r | --random       Choose a random theme for environment
     -d | --dry          Print out variables, but do not appy theme
 EOF
 }
@@ -101,6 +100,11 @@ function parse-args () {
                 THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | fzf --ansi --preview 'print-fzf-summary {}')
                 CHOSEN='true'
                 ;; 
+
+            -r | --random)
+                THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | shuf -n 1)
+                CHOSEN='true'
+                ;;
 
             -d | --dry)
                 DRYRUN='true'
@@ -201,7 +205,7 @@ function print-colors () {
     done
 }
 
-function substitute-colors () {
+function substitute-params () {
 
     SUBFILES=$(copy-configs 'dry')
 
@@ -213,21 +217,30 @@ function substitute-colors () {
             do
                 sed -i "s/\$${j}/${COLORS[${j}]}/g" ${HOME}/.config/${i}
             done
+
+            # Substitute in background path
+            check-bg-ext
+            sed -i "s#\$backgroundimage#${THEME}/background.${EXT}#g" ${HOME}/.config/${i}
         fi
     done 
+}
+
+function check-bg-ext () {
+    if [[ -f ${THEME}/background.jpg ]];
+    then 
+        EXT='jpg'
+    else 
+        EXT='png'
+    fi
+
+    export EXT
 }
 
 function block-print-background () {
     cd ${THEME} 
 
-    if [[ -f ${THEME}/background.jpg ]];
-    then 
-        local ext="jpg"
-    else 
-        local ext="png"
-    fi
-
-    timg --center -p quarter -g ${COLS}x${LINES} ${THEME}/background.${ext}
+    check-bg-ext
+    timg --center -p quarter -g ${COLS}x${LINES} ${THEME}/background.${EXT}
 }
 
 function print-fzf-summary () {
@@ -240,7 +253,7 @@ function print-fzf-summary () {
     echo ''
     block-print-background
     copy-configs 'silent'
-    substitute-colors
+    substitute-params
     reload-term
 }
 
@@ -250,6 +263,10 @@ function print-fzf-summary () {
 
 function reload-term () {
     kill -10 $(pidof kitty)
+}
+
+function reload-sway () {
+    swaymsg 'reload' 
 }
 
 function cleanup () {
@@ -301,10 +318,11 @@ function main () {
     copy-configs
 
     print-header 'Substituting colors'
-    substitute-colors
+    substitute-params
 
     print-header 'Reloading configs'
     reload-term 
+    reload-sway
 }
 
 export -f print-header 
@@ -317,11 +335,12 @@ export -f check-args
 export -f copy-configs 
 export -f source-colors 
 export -f print-colors 
-export -f substitute-colors 
+export -f substitute-params 
 export -f block-print-background 
 export -f print-fzf-summary 
 export -f dry-run
 export -f reload-term
+export -f check-bg-ext
 
 main "$@"
 

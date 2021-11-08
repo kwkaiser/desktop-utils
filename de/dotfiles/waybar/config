@@ -1,31 +1,48 @@
-{
-  "height": 30,
-  "layer": "top",
-  "modules-left": [
-    "sway/workspaces",
-    "sway/mode"
-  ],
-  "modules-center": [
-    "sway/window"
-  ],
-  "modules-right": [
-    "battery",
-    "clock"
-  ],
-  "sway/window": {
-    "max-length": 50
+[
+  {
+    "height": 40,
+    "layer": "top",
+    "position": "top",
+    "modules-left": [],
+    "modules-center": [
+      "sway/workspaces"
+    ],
+    "modules-right": [],
+    "clock": {
+      "interval": 1,
+      "format": "{:%Y-%m-%d %H:%M:%S}"
+    },
+    "cpu": {
+      "interval": 10,
+      "format": "cpu: {}%"
+    },
+    "memory": {
+      "interval": 30,
+      "format": "mem: {}%",
+      "max-length": 10
+    }
   },
-  "battery": {
-    "format": "{capacity}% {icon}",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
-  },
-  "clock": {
-    "format-alt": "{:%a, %d. %b  %H:%M}"
+  {
+    "height": 40,
+    "layer": "top",
+    "position": "bottom",
+    "modules-left": [],
+    "modules-center": [
+      "cpu"
+    ],
+    "modules-right": [],
+    "clock": {
+      "interval": 1,
+      "format": "{:%Y-%m-%d %H:%M:%S}"
+    },
+    "cpu": {
+      "interval": 10,
+      "format": "{}% "
+    },
+    "memory": {
+      "interval": 30,
+      "format": "mem: {}%",
+      "max-length": 10
+    }
   }
-}
+]

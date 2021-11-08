@@ -1,0 +1,13 @@
+rofi 
+pass 
+rofi-pass
+
+timg
+kitty
+
+rsync
+openssh 
+
+docker
+libvirt
+visual-studio-code-bin

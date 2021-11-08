@@ -1,0 +1,6 @@
+waybar
+swayidle
+swaylock
+sway-git
+gammastep
+nerd-fonts-complete

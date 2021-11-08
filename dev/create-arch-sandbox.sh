@@ -5,6 +5,16 @@ shopt -s expand_aliases
 
 alias qvirsh="virsh --connect=qemu:///system"
 
+print-header () {
+    LENGTH=${#1}
+
+    echo ''
+    seq -s= ${LENGTH}|tr -d '[:digit:]'
+    echo ${1}
+    seq -s= ${LENGTH}|tr -d '[:digit:]'
+    echo ''
+}
+
 function script-usage () {
     cat << EOF
 Usage: 

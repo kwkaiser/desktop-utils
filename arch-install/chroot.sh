@@ -222,8 +222,8 @@ function configure-administrator () {
 function finish-up () {
     print-header 'Cleaning up. Please exit and reboot'
 
-    mkdir -p /home/${ACCOUNT}/Documents/
-    mv /desktop-utils /home/${ACCOUNT}/Documents/
+    mkdir -p /home/${ACCOUNT}/documents/
+    mv /desktop-utils /home/${ACCOUNT}/documents/
 
     chown -R ${ACCOUNT}:${ACCOUNT} /home/${ACCOUNT}/
 }

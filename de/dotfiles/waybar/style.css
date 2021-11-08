@@ -1,75 +1,52 @@
+/* MAIN WINDOW */
+
 * {
-  border: none;
-  border-radius: 0;
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  min-height: 0;
+  font-family: Hack;
+  font-size: 11px;
 }
 
 window#waybar {
-  background: rgba(43, 48, 59, 0.5);
-  border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-  color: white;
+  background: transparent;
 }
 
-tooltip {
-  background: rgba(43, 48, 59, 0.5);
-  border: 1px solid rgba(100, 114, 125, 0.5);
-}
-tooltip label {
-  color: white;
-}
+/* WORKSPACE */
 
 #workspaces button {
-  padding: 0 5px;
-  background: transparent;
-  color: white;
-  border-bottom: 3px solid transparent;
+  background: $color8;
+  color: $color15;
+  margin-top: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
+  border: 1px solid $color4;
 }
 
 #workspaces button.focused {
-  background: #64727d;
-  border-bottom: 3px solid white;
+  color: $color7;
+  background: $color0;
+  border: 2px solid $color2;
 }
 
-#mode,
-#clock,
-#battery {
-  padding: 0 10px;
+#workspaces button.urgent {
+  color: $color7;
+  background: $color0;
+  /* border: 1px solid $color1; */
 }
 
-#mode {
-  background: #64727d;
-  border-bottom: 3px solid white;
+/* SYS STATS */
+
+#cpu {
+  color: $foreground;
+  background: transparent;
 }
 
+/* 
+#cpu,
+#memory,
 #clock {
-  background-color: #64727d;
-}
-
-#battery {
-  background-color: #ffffff;
-  color: black;
-}
-
-#battery.charging {
-  color: white;
-  background-color: #26a65b;
-}
-
-@keyframes blink {
-  to {
-    background-color: #ffffff;
-    color: black;
-  }
-}
-
-#battery.warning:not(.charging) {
-  background: #f53c3c;
-  color: white;
-  animation-name: blink;
-  animation-duration: 0.5s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
+  padding: 4px;
+  color: $color15;
+  background: $color8;
+  border: 2px solid $color4;
+  margin: 8px;
+  border-radius: 6px;
+} */
