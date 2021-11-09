@@ -30,19 +30,14 @@ repeat(){
 }
 
 function check-dependencies () {
-    if [[ ! $(command -v fzf) || ! $(command -v rsync) || ! $(command -v timg) ]];
+    if [[ ! $(command -v fzf) || ! $(command -v timg) ]];
     then 
         echo 'This script expects three dependencies:'
-        echo '  -rsync'
         echo '  -fzf'
         echo '  -timg'
         exit 1
     fi 
 }
-
-################
-# Arg handling #
-################
 
 function script-usage () {
     cat << EOF
@@ -55,8 +50,13 @@ Usage:
     -t | --theme        Provide a specific path to an environment theme and setup
     -r | --random       Choose a random theme for environment
     -d | --dry          Print out variables, but do not appy theme
+    -s | --sub-only     Only transfer configurations with color substitutions
 EOF
 }
+
+################
+# Arg handling #
+################
 
 function initialize-args () {
     export DOTFILES=${HOME}/dotfiles
@@ -89,7 +89,7 @@ function parse-args () {
                 then
                     THEME=${2-}
                 else
-                    echo "Conflicting theme selection options"
+                    echo 'Conflicting theme selection options'
                     exit 1
                 fi
 
@@ -97,17 +97,35 @@ function parse-args () {
                 ;;
 
             -i | --interactive) 
-                THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | fzf --ansi --preview 'print-fzf-summary {}')
-                CHOSEN='true'
+                if [[ -z ${THEME} ]];
+                then
+                    THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | fzf --ansi --preview 'print-fzf-summary {}')
+                    CHOSEN='true'
+                else
+                    echo 'Conflicting theme selection options'
+                    exit 1
+                fi
+                
                 ;; 
 
             -r | --random)
-                THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | shuf -n 1)
-                CHOSEN='true'
+                if [[ -z ${THEME} ]];
+                then
+                    THEME=${DOTFILES}/themes/$(ls ${DOTFILES}/themes | shuf -n 1)
+                    CHOSEN='true'   
+                else
+                    echo 'Conflicting theme selection options'
+                    exit 1
+                fi
+                
                 ;;
 
             -d | --dry)
                 DRYRUN='true'
+                ;;
+
+            -s | --sub-only)
+                SUBARG='sub-only'
                 ;;
 
             -?*) 
@@ -143,23 +161,35 @@ function check-args () {
 # Config handling #
 ###################
 
-function copy-configs () {
-    if [[ "${1}" = "dry" ]];
-    then
-        local output=$(rsync -aP --dry-run --ignore-times --exclude='themes' ${DOTFILES}/ ${HOME}/.config)
-        for line in ${output};
-        do 
-            if [[ ! -d ${HOME}/.config/${line} ]];
-            then 
-                echo ${line}
-            fi
-        done 
-    elif [[ "${1}" = "silent" ]];
+function copy-config () {
+    local dirname=$(basename $(dirname ${1}))
+    local cleanname=$(echo $(basename ${1}) | sed --expression='s/sub-//g')
+    mkdir -p ${HOME}/.config/${dirname}
+
+    if [[ $(echo "$@" | grep -i 'run-dry' ) ]];
     then 
-        cp ${DOTFILES}/kitty/kitty.conf ${HOME}/.config/kitty/kitty.conf
-    else
-        rsync -aP --ignore-times --exclude='themes' ${DOTFILES}/ ${HOME}/.config
+        echo ${HOME}/.config/${dirname}/${cleanname}
+    else 
+        cp ${1} ${HOME}/.config/${dirname}/${cleanname}
     fi
+}
+
+function copy-configs () {
+    if [[ $(echo "$@" | grep -i 'run-dry') ]];
+    then 
+        local dryarg='run-dry'
+    fi
+
+    if [[ $(echo "$@" | grep -i 'sub-only') ]];
+    then 
+        echo $(find ${DOTFILES} -type f -not -path '*/themes/*' -name 'sub-*' -exec bash -c "copy-config {} ${dryarg}" \;)
+    elif [[ $(echo "$@" | grep -i 'kitty') ]];
+    then 
+        cp ${DOTFILES}/kitty/sub-kitty.conf ${HOME}/.config/kitty/kitty.conf
+        echo ${HOME}/.config/kitty/kitty.conf
+    else 
+        echo $(find ${DOTFILES} -type f -not -path '*/themes/*' -exec bash -c "copy-config {} ${dryarg}" \;)
+    fi 
 }
 
 ############################
@@ -181,6 +211,7 @@ function source-colors () {
         local varname="color${number}"
         COLORS[${varname}]=${!varname}
     done
+
 }
 
 function print-colors () {
@@ -207,20 +238,21 @@ function print-colors () {
 
 function substitute-params () {
 
-    SUBFILES=$(copy-configs 'dry')
+    SUBFILES=$(copy-configs 'run-dry' 'sub-only')
+
+    check-bg-ext
 
     for i in ${SUBFILES};
     do  
-        if [[ -f ${HOME}/.config/${i} ]];
+        if [[ -f ${i} ]];
         then 
             for j in "${!COLORS[@]}"
             do
-                sed -i "s/\$${j}/${COLORS[${j}]}/g" ${HOME}/.config/${i}
+                sed -i "s/\$${j}/${COLORS[${j}]}/g" ${i}
             done
 
             # Substitute in background path
-            check-bg-ext
-            sed -i "s#\$backgroundimage#${THEME}/background.${EXT}#g" ${HOME}/.config/${i}
+            sed -i "s#\$backgroundimage#${THEME}/background.${EXT}#g" ${i}
         fi
     done 
 }
@@ -252,7 +284,7 @@ function print-fzf-summary () {
     print-colors ${TTY} 'centered'
     echo ''
     block-print-background
-    copy-configs 'silent'
+    copy-configs 'kitty'
     substitute-params
     reload-term
 }
@@ -262,7 +294,7 @@ function print-fzf-summary () {
 ####################
 
 function reload-term () {
-    kill -10 $(pidof kitty)
+    kill -10 $(pidof kitty) &> /dev/null
 }
 
 function reload-sway () {
@@ -289,7 +321,11 @@ function dry-run () {
     echo ''
 
     print-header 'Copied files:'
-    copy-configs 'dry'
+    local files=$(copy-configs 'run-dry' ${SUBARG})
+    for i in ${files};
+    do
+        echo ${i}
+    done
 
     print-header 'Colors:'
     print-colors 
@@ -314,13 +350,10 @@ function main () {
         exit 1
     fi
 
-    print-header 'Copying configs'
-    copy-configs
+    copy-configs ${SUBARG}
 
-    print-header 'Substituting colors'
     substitute-params
 
-    print-header 'Reloading configs'
     reload-term 
     reload-sway
 }
@@ -332,6 +365,7 @@ export -f script-usage
 export -f initialize-args 
 export -f parse-args 
 export -f check-args 
+export -f copy-config
 export -f copy-configs 
 export -f source-colors 
 export -f print-colors 

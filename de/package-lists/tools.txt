@@ -2,6 +2,8 @@ rofi
 pass 
 rofi-pass
 
+bc
+fzf
 timg
 kitty
 

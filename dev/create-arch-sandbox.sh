@@ -3,9 +3,13 @@
 cd $(dirname $(realpath $0))
 shopt -s expand_aliases
 
+#############
+# UTILITIES #
+#############
+
 alias qvirsh="virsh --connect=qemu:///system"
 
-print-header () {
+function print-header () {
     LENGTH=${#1}
 
     echo ''
@@ -27,7 +31,6 @@ Usage:
     -y|copy             Copy over install-script suite
 EOF
 }
-
 
 function parse-args () {
     while getopts "hpvcdnyr:i:" o; do 
@@ -64,6 +67,10 @@ function parse-args () {
     done
     shift $((OPTIND-1))
 }
+
+######################
+# MAIN FUNCTIONALITY #
+######################
 
 function create-arch-test-pools () {
     qvirsh pool-destroy vmpool 

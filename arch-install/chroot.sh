@@ -1,7 +1,20 @@
 #!/bin/bash
 
 cd $(dirname $(realpath $0))
-source ../lib/util.sh
+
+#############
+# UTILITIES #
+#############
+
+function print-header () {
+    LENGTH=${#1}
+
+    echo ''
+    seq -s= ${LENGTH}|tr -d '[:digit:]'
+    echo ${1}
+    seq -s= ${LENGTH}|tr -d '[:digit:]'
+    echo ''
+}
 
 function script-usage () {
     cat << EOF
@@ -22,6 +35,12 @@ Usage:
 EOF
     exit 1
 }
+
+#############
+# ARG PARSE #
+#############
+
+
 
 function parse-args () {
     while getopts "hn:r:a:e:b:p:d:w:y:" o; do 
@@ -105,6 +124,10 @@ function step-wait () {
         fi
     fi
 }
+
+######################
+# MAIN FUNCTIONALITY #
+######################
 
 function assign-hostname () {
     print-header 'Assiging hostname'
