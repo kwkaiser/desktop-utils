@@ -3,3 +3,4 @@ swayidle
 swaylock
 sway-git
 gammastep
+ttf-nerd-fonts-symbols

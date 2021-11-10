@@ -6,7 +6,12 @@ bc
 fzf
 timg
 kitty
+firefox
 
+neofetch
+
+wget
+curl
 rsync
 openssh 
 

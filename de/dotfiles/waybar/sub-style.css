@@ -18,6 +18,7 @@ window#waybar {
   margin-left: 4px;
   margin-right: 4px;
   border: 1px solid $color4;
+  border-radius: 7px;
 }
 
 #workspaces button.focused {
@@ -29,24 +30,22 @@ window#waybar {
 #workspaces button.urgent {
   color: $color7;
   background: $color0;
-  /* border: 1px solid $color1; */
+  border: 1px solid $color1;
 }
 
 /* SYS STATS */
 
-#cpu {
-  color: $foreground;
-  background: transparent;
-}
-
-/* 
 #cpu,
 #memory,
-#clock {
-  padding: 4px;
+#disk {
   color: $color15;
   background: $color8;
-  border: 2px solid $color4;
-  margin: 8px;
-  border-radius: 6px;
-} */
+  border: 1px solid $color4;
+  border-radius: 7px;
+  font-size: 17px;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-bottom: 8px;
+  margin-left: 4px;
+  margin-right: 4px;
+}

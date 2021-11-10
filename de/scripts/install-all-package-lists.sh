@@ -4,7 +4,6 @@ set -e
 
 trap cleanup EXIT;
 
-# Remove sudo timout so mkpkg isn't run as root, but installation isn't interrupted.
 
 # Remove sudo timout so mkpkg isn't run as root, but installation isn't interrupted.
 
