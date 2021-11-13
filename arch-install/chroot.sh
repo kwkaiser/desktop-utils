@@ -192,7 +192,7 @@ function create-bootloader () {
     bootctl --path=/boot install 
 
 cat > /boot/loader/entries/arch.conf << EOF
-tile Arch Linux
+title Arch Linux
 linux /vmlinuz-linux
 initrd /intel-ucode.img
 initrd /initramfs-linux.img
