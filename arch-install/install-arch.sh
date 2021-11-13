@@ -210,7 +210,7 @@ function base-install () {
     echo 'This can take a little while'
 
     reflector --age 72 --country US --fastest 10 --save /etc/pacman.d/mirrorlist
-    pacstrap /mnt linux base base-devel btrfs-progs intel-ucode vim sudo networkmanager reflector git
+    pacstrap /mnt linux linux-firmware base base-devel btrfs-progs intel-ucode vim sudo networkmanager reflector git
 }
 
 function generate-fstab () {
