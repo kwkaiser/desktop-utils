@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 cd $(dirname $(realpath $0))
 
 #############
@@ -229,12 +230,6 @@ function enable-networking () {
     systemctl enable NetworkManager
 }
 
-function update-repos () {
-    print-header 'Updating reposistory mirrorlist'
-
-    reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-}
-
 function configure-administrator () {
     print-header 'Adding default user to sudo group'
 
@@ -270,7 +265,6 @@ function main () {
     customize-initramfs  && step-wait
     create-bootloader && step-wait
     enable-networking && step-wait
-    update-repos && step-wait
     configure-administrator && step-wait
     finish-up
 }

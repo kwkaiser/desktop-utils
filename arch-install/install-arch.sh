@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 cd $(dirname $(realpath $0))
 
 #############
@@ -208,7 +209,7 @@ function base-install () {
     echo 'Using reflector script to find best mirrors...'
     echo 'This can take a little while'
 
-    reflector --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector --age 72 --country US --fastest 10 --save /etc/pacman.d/mirrorlist
     pacstrap /mnt linux base base-devel btrfs-progs intel-ucode vim sudo networkmanager reflector git
 }
 
@@ -218,12 +219,18 @@ function generate-fstab () {
     genfstab -U /mnt >> /mnt/etc/fstab
 }
 
+function copy-mirrorlist () {
+    print-header 'Copying over mirror list'
+    mkdir -p /mnt/etc/pacman.d/
+    cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
+}
+
 function run-chroot () {
     print-header 'Executing chroot script'
 
     cp -r ../../desktop-utils/ /mnt/desktop-utils
 
-    if [[ ${PREFIX} == '' ]];
+    if [[ "${PREFIX}" == '' ]];
     then 
         arch-chroot /mnt /bin/bash /desktop-utils/arch-install/chroot.sh -n ${HOSTNAME} -r ${ROOTPASS} -a ${ACCOUNT} -e ${ENCRYPTED} -b ${BTRFS} -d ${DEVICE} -y ${DRYRUN} -w ${WAIT} 
     else 
@@ -255,6 +262,7 @@ function main () {
     format-partitions && step-wait
     make-mounts && step-wait
     base-install && step-wait
+    copy-mirrorlist && step-wait
     generate-fstab && step-wait
     run-chroot 
 }
