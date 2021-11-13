@@ -1,0 +1,86 @@
+[
+  {
+    "display": "Virtual-1",
+    "height": 40,
+    "layer": "top",
+    "position": "top",
+    "modules-left": [],
+    "modules-center": [
+      "sway/workspaces"
+    ],
+    "modules-right": []
+  },
+  {
+    "display": "Virtual-1",
+    "height": 40,
+    "layer": "top",
+    "position": "bottom",
+    "modules-left": [
+      "cpu"
+    ],
+    "modules-center": [
+      "clock"
+    ],
+    "modules-right": [
+      "memory"
+    ],
+    "cpu": {
+      "interval": 10,
+      "format": "龍 {}%"
+    },
+    "clock": {
+      "interval": 1,
+      "format": "{:%H:%M:%S}"
+    },
+    "memory": {
+      "interval": 30,
+      "format": " {}%",
+      "max-length": 10
+    }
+  }
+  /*
+  {
+    "display": "Virtual-1",
+    "height": 40,
+    "layer": "top",
+    "position": "top",
+    "modules-left": [],
+    "modules-center": [
+      "sway/workspaces"
+    ],
+    "modules-right": []
+  },
+  {
+    "display": "Virtual-1",
+    "height": 40,
+    "layer": "top",
+    "position": "bottom",
+    "modules-left": [
+      "network"
+    ],
+    "modules-center": [
+      "clock"
+    ],
+    "modules-right": [
+      "disk"
+    ],
+    "clock": {
+      "interval": 1,
+      "format": "{:%Y-%m-%d}"
+    },
+    "network": {
+      "interval": 1,
+      "interface": "enp1s0",
+      "format": "{ifname}",
+      "format-wifi": "{essid} ({signalStrength}%) ",
+      "format-ethernet": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",
+      "format-disconnected": "disconnected"
+    },
+    "disk": {
+      "interval": 120,
+      "format": " {percentage_used}%",
+      "path": "/"
+    }
+  }
+  */
+]

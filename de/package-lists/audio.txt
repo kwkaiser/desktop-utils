@@ -3,3 +3,4 @@ pipewire
 bluez
 blueman
 bluez-utils
+pavucontrol

@@ -256,7 +256,8 @@ function main () {
     make-mounts && step-wait
     base-install && step-wait
     generate-fstab && step-wait
-    run-chroot 
+    exit 1
+    # run-chroot 
 }
 
 main "$@" 

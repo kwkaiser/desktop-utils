@@ -37,15 +37,23 @@ window#waybar {
 
 #cpu,
 #memory,
-#disk {
+#clock,
+#disk,
+#network {
   color: $color15;
-  background: $color8;
-  border: 1px solid $color4;
+  background: $color0;
+  border: 1px solid $color2;
   border-radius: 7px;
-  font-size: 17px;
-  padding-left: 8px;
-  padding-right: 8px;
+  font-size: 14;
+  min-width: 60px;
+  padding-left: 32px;
+  padding-right: 32px;
   margin-bottom: 8px;
-  margin-left: 4px;
-  margin-right: 4px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+#network {
+  padding-left: 6px;
+  padding-right: 6px;
 }

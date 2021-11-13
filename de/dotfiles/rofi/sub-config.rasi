@@ -22,7 +22,7 @@ window {
     width: 50%;
     padding: 5px;
     border: 1px;
-    border-color: @fg;
+    border-color: $color2;
 }
 
 prompt {

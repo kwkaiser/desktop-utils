@@ -52,7 +52,8 @@ function check-dependencies () {
         exit 1
     fi
 
-    if [[ "$(get-terminal)" != 'kitty' ]];
+    # Only check for kitty if there are displayed devices (e.g. handle first time setup)
+    if [[ $(swaymsg -t get_outputs &> /dev/null ) && "$(get-terminal)" != 'kitty' ]];
     then 
         printf '%s\n' 'This script is only meant to work with kitty, sorry!'
         exit 1

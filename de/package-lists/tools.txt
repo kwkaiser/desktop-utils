@@ -2,19 +2,40 @@ rofi
 pass 
 rofi-pass
 
-bc
+at
 fzf
 timg
+tldr
+tree
+unzip
+unrar
 kitty
-firefox
-
+which
 neofetch
+
+gparted
+android-tools
+
+evince
+firefox
+remmina
+caprine
+spotify
+discord
+darktable
+virt-manager
+
+vulkan-radeon
 
 wget
 curl
+nmap
 rsync
 openssh 
 
+npm
+node
+qemu
 docker
 libvirt
 visual-studio-code-bin
