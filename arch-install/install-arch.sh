@@ -136,7 +136,7 @@ function step-wait () {
         read local CONTINUE
         echo ''
 
-        if [[ ${CONTINUE} == 'q' ]];
+        if [[ "${CONTINUE}" == 'q' ]];
         then
             exit 1
         fi
@@ -170,7 +170,7 @@ function format-partitions () {
     mkswap -L 'SWAP' ${DEVICE}${PREFIX}2
     swapon ${DEVICE}${PREFIX}2
 
-    if [[ ${BTRFS} == 'true' ]];
+    if [[ "${BTRFS}" == 'true' ]];
     then
         mkfs.btrfs -L 'ARCHROOT' ${ROOTPART}
     else
@@ -242,7 +242,7 @@ function main () {
     initialize-args
     parse-args "$@"
 
-    if [[ ${DRYRUN} == 'true' ]];
+    if [[ "${DRYRUN}" == 'true' ]];
     then
         dry-run
     fi
@@ -251,7 +251,7 @@ function main () {
 
     partition-disks && step-wait
 
-    if [[ ${ENCRYPTED} == 'true' ]];
+    if [[ "${ENCRYPTED}" == 'true' ]];
     then
         encrypt-root && step-wait
         ROOTPART=/dev/mapper/rootpart
