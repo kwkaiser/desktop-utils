@@ -9,16 +9,16 @@ else
 
     declare -a sscripts=( 'mountbox.sh' 'umountbox.sh' )
 
-    for i in ${scripts[@]};
+    for j in ${scripts[@]};
     do
-        newpath=/usr/local/bin/$(echo "${i%.*}")
-        cp ${i} ${newpath}
+        newpath=/usr/local/bin/$(echo "${j%.*}")
+        cp ${j} ${newpath}
         chmod +x ${newpath}
     done
 
     for i in ${sscripts[@]};
     do
-        ewpath=/usr/local/sbin/$(echo "${i%.*}")
+        newpath=/usr/local/sbin/$(echo "${i%.*}")
         cp ${i} ${newpath}
         chmod +x ${newpath}
     done

@@ -131,7 +131,7 @@ function parse-args () {
                 if [[ -z ${THEME} ]];
                 then
                     INTERACTIVE='true'
-                    THEME=$(ls ${DOTFILES}/.config/themes | fzf --ansi --preview 'print-fzf-summary {}')
+                    THEME=$(ls ${DOTFILES}/.config/systhemes | fzf --ansi --preview 'print-fzf-summary {}')
 
                     if [[ -f ${HOME}/.config/kitty/kitty.conf ]];
                     then 
@@ -171,7 +171,7 @@ function check-args () {
         exit 1
     fi
 
-    if [[ -z ${THEME} || ! -d ${DOTFILES}/.config/themes/${THEME} || ! -f ${DOTFILES}/.config/themes/${THEME}/colors.txt ]];
+    if [[ -z ${THEME} || ! -d ${DOTFILES}/.config/systhemes/${THEME} || ! -f ${DOTFILES}/.config/systhemes/${THEME}/colors.txt ]];
     then 
         printf '%s\n%s\n' 'Invalid theme directory:' ${THEME}
         exit 1
@@ -183,7 +183,7 @@ function check-args () {
 #################
 
 function source-colors () {
-    cd ${DOTFILES}/.config/themes/${THEME}
+    cd ${DOTFILES}/.config/systhemes/${THEME}
     source ./colors.txt
 
     declare -g -A COLORS
@@ -201,7 +201,7 @@ function source-colors () {
 }
 
 function check-bg-ext () {
-    if [[ -f ${DOTFILES}/.config/themes/${THEME}/background.jpg ]];
+    if [[ -f ${DOTFILES}/.config/systhemes/${THEME}/background.jpg ]];
     then 
         EXT='jpg'
     else 
@@ -216,7 +216,7 @@ function check-bg-ext () {
 ##################
 
 function get-random-theme () {
-    printf $(ls ${DOTFILES}/.config/themes | shuf -n 1)
+    printf $(ls ${DOTFILES}/.config/systhemes | shuf -n 1)
 }
 
 function get-dot-paths () {
@@ -230,7 +230,7 @@ function get-dot-paths () {
         local argstring='sub-*'
     fi
 
-    printf '%s\n' $(find ${DOTFILES} -type f -not -path '*/themes/*' -name "${argstring}" -exec printf '%s ' {} \;)
+    printf '%s\n' $(find ${DOTFILES} -type f -not -path '*/systhemes/*' -name "${argstring}" -exec printf '%s ' {} \;)
 }
 
 function copy-dot-to-config () {
@@ -271,7 +271,7 @@ function substitute-params () {
     done
 
     # Substitute in background path
-    sed -i "s#\$backgroundimage#${DOTFILES}/.config/themes/${THEME}/background.${EXT}#g" ${1}
+    sed -i "s#\$backgroundimage#${DOTFILES}/.config/systhemes/${THEME}/background.${EXT}#g" ${1}
 }
 
 function cleanup () {
@@ -289,10 +289,10 @@ function cleanup () {
 ########################
 
 function block-print-background () {
-    cd ${DOTFILES}/.config/themes/${THEME} 
+    cd ${DOTFILES}/.config/systhemes/${THEME} 
 
     check-bg-ext
-    timg --center -p quarter -g $(tput cols)x$(tput lines) ${DOTFILES}/.config/themes/${THEME}/background.${EXT}
+    timg --center -p quarter -g $(tput cols)x$(tput lines) ${DOTFILES}/.config/systhemes/${THEME}/background.${EXT}
 }
 
 function print-colors () {

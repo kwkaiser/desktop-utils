@@ -19,6 +19,7 @@ arch-install-scripts
 gparted
 android-tools
 
+qtpass
 evince
 firefox
 remmina

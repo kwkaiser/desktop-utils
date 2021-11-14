@@ -1,3 +1,3 @@
 #! /bin/bash
 
-unount /home/kwkaiser/box/photos
+umount /home/kwkaiser/box/photos
