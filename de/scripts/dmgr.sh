@@ -42,7 +42,8 @@ function print-centered () {
 }
 
 function get-terminal () {
-    printf $(ps -o comm= -p "$(($(ps -o ppid= -p "$(($(ps -o sid= -p "$$")))")))")
+    echo ''
+    # printf $(ps -o comm= -p "$(($(ps -o ppid= -p "$(($(ps -o sid= -p "$$")))")))")
 }
 
 function check-dependencies () {
@@ -81,7 +82,7 @@ EOF
 
 function initialize-args () {
     export TTY=$(tty)
-    export DOTFILES=${HOME}/documents/desktop-utils/de/dotfiles
+    export DOTFILES=${HOME}/documents/desktop-utils/de/dotfiles/
 
     if [[ -f ${HOME}/.config/kitty/kitty.conf ]];
     then 
@@ -130,7 +131,7 @@ function parse-args () {
                 if [[ -z ${THEME} ]];
                 then
                     INTERACTIVE='true'
-                    THEME=$(ls ${DOTFILES}/themes | fzf --ansi --preview 'print-fzf-summary {}')
+                    THEME=$(ls ${DOTFILES}/.config/themes | fzf --ansi --preview 'print-fzf-summary {}')
 
                     if [[ -f ${HOME}/.config/kitty/kitty.conf ]];
                     then 
@@ -170,7 +171,7 @@ function check-args () {
         exit 1
     fi
 
-    if [[ -z ${THEME} || ! -d ${DOTFILES}/themes/${THEME} || ! -f ${DOTFILES}/themes/${THEME}/colors.txt ]];
+    if [[ -z ${THEME} || ! -d ${DOTFILES}/.config/themes/${THEME} || ! -f ${DOTFILES}/.config/themes/${THEME}/colors.txt ]];
     then 
         printf '%s\n%s\n' 'Invalid theme directory:' ${THEME}
         exit 1
@@ -182,7 +183,7 @@ function check-args () {
 #################
 
 function source-colors () {
-    cd ${DOTFILES}/themes/${THEME}
+    cd ${DOTFILES}/.config/themes/${THEME}
     source ./colors.txt
 
     declare -g -A COLORS
@@ -200,7 +201,7 @@ function source-colors () {
 }
 
 function check-bg-ext () {
-    if [[ -f ${DOTFILES}/themes/${THEME}/background.jpg ]];
+    if [[ -f ${DOTFILES}/.config/themes/${THEME}/background.jpg ]];
     then 
         EXT='jpg'
     else 
@@ -215,7 +216,7 @@ function check-bg-ext () {
 ##################
 
 function get-random-theme () {
-    printf $(ls ${DOTFILES}/themes | shuf -n 1)
+    printf $(ls ${DOTFILES}/.config/themes | shuf -n 1)
 }
 
 function get-dot-paths () {
@@ -235,22 +236,28 @@ function get-dot-paths () {
 function copy-dot-to-config () {
     # Expects dirty (dotfiles) path
 
+    local nextdir=$(dirname ${1})
+    local relative=$(basename ${nextdir})
+    while [[ "$(realpath ${nextdir})" != "$(realpath ${DOTFILES})" ]];
+    do
+        nextdir=$(dirname ${nextdir})
+        relative=$(basename ${nextdir})/${relative}
+    done
+
     local dirname=$(basename $(dirname ${1}))
     local cleanname=$(echo $(basename ${1}) | sed --expression='s/sub-//g')
 
-    if [[ ! "${dirname}" == "dotfiles" ]];
-    then
-        mkdir -p ${HOME}/.config/${dirname}
+    if [[ "${relative}" == 'dotfiles' ]];
+    then 
+        relative=$(realpath ${HOME}/${cleanname})
+    else 
+        # Cut 'dotfiles' from name
+        relative=${HOME}/$(echo ${relative} | cut -c10-)/${cleanname}
     fi
 
-    if [[ "${dirname}" == "dotfiles" ]];
-    then 
-        cp ${1} ${HOME}/${cleanname}
-        echo ${HOME}/${cleanname}
-    else
-        cp ${1} ${HOME}/.config/${dirname}/${cleanname}
-        echo ${HOME}/.config/${dirname}/${cleanname}
-    fi 
+    mkdir -p $(dirname ${relative})
+    cp ${1} ${relative}
+    echo ${relative}
 }
 
 function substitute-params () {
@@ -264,7 +271,7 @@ function substitute-params () {
     done
 
     # Substitute in background path
-    sed -i "s#\$backgroundimage#${DOTFILES}/themes/${THEME}/background.${EXT}#g" ${1}
+    sed -i "s#\$backgroundimage#${DOTFILES}/.config/themes/${THEME}/background.${EXT}#g" ${1}
 }
 
 function cleanup () {
@@ -282,10 +289,10 @@ function cleanup () {
 ########################
 
 function block-print-background () {
-    cd ${DOTFILES}/themes/${THEME} 
+    cd ${DOTFILES}/.config/themes/${THEME} 
 
     check-bg-ext
-    timg --center -p quarter -g $(tput cols)x$(tput lines) ${DOTFILES}/themes/${THEME}/background.${EXT}
+    timg --center -p quarter -g $(tput cols)x$(tput lines) ${DOTFILES}/.config/themes/${THEME}/background.${EXT}
 }
 
 function print-colors () {
@@ -304,7 +311,7 @@ function print-fzf-summary () {
     print-colors ${TTY} 
     echo ''
     block-print-background
-    local kittypath=$(copy-dot-to-config "${DOTFILES}/kitty/sub-kitty.conf")
+    local kittypath=$(copy-dot-to-config "${DOTFILES}/.config/kitty/sub-kitty.conf")
     substitute-params ${kittypath}
     reload-term
 }
@@ -330,6 +337,10 @@ function main () {
     parse-args "$@"
     check-args
     check-dependencies
+
+    # copy-dot-to-config '/home/kwkaiser/documents/desktop-utils/de/dotfiles/.config/gammastep/config.ini'
+    # copy-dot-to-config '/home/kwkaiser/documents/desktop-utils/de/dotfiles/.gnupg/gpg-agent.conf'
+    # copy-dot-to-config '/home/kwkaiser/documents/desktop-utils/de/dotfiles/.bashrc'
 
     if [[ "${DRYRUN}" == 'true' ]];
     then 

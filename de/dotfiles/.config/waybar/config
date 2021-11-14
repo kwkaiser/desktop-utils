@@ -63,7 +63,7 @@
     "modules-right": [
       "disk"
     ],
-    "clock": {
+    "clock#2": {
       "interval": 1,
       "format": "{:%Y-%m-%d}"
     },

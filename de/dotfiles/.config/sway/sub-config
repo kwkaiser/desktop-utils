@@ -2,7 +2,8 @@
 # INIT #
 ########
 
-exec  blueman-applet
+exec gammastep 
+exec blueman-applet
 
 ########
 # BASE #
