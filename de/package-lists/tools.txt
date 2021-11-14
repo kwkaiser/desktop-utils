@@ -12,6 +12,7 @@ unzip
 unrar
 kitty
 which
+ranger
 neofetch
 arch-install-scripts
 

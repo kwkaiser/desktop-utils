@@ -48,6 +48,14 @@ titlebar_border_thickness 1
 bindsym $mod+Shift+d exec rofi -show run
 bindsym $mod+Shift+p exec tessen -b rofi
 
+bindcode 76 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindcode 95 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindcode 96 exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+
+bindcode $mod+76 exec playerctl previous
+bindcode $mod+95 exec playerctl play-pause 
+bindcode $mod+96 exec playerctl next
+
 #################
 # BORING HOTKEY #
 #################
