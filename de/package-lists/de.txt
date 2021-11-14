@@ -4,3 +4,9 @@ swaylock
 sway-git
 gammastep
 ttf-nerd-fonts-symbols
+
+gtk4
+gtk3
+gtk2
+qt5-base
+qt6-base

@@ -1,4 +1,6 @@
 pipewire 
+pipewire-alsa
+pipewire-pulseaudio
 
 bluez
 blueman

@@ -1,6 +1,7 @@
-rofi 
-pass 
-rofi-pass
+pass
+tessen
+pass-tessen
+rofi-lbonn-wayland-git
 
 at
 fzf
@@ -12,6 +13,7 @@ unrar
 kitty
 which
 neofetch
+arch-install-scripts
 
 gparted
 android-tools
@@ -22,19 +24,19 @@ remmina
 caprine
 spotify
 discord
+chromium
 darktable
 virt-manager
 
 vulkan-radeon
 
+jq
 wget
 curl
 nmap
 rsync
 openssh 
 
-npm
-node
 qemu
 docker
 libvirt
