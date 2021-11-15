@@ -3,6 +3,7 @@ swayidle
 swaylock
 sway-git
 gammastep
+lxappearance
 ttf-nerd-fonts-symbols
 
 gtk4

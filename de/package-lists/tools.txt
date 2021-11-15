@@ -4,6 +4,7 @@ pass-tessen
 rofi-lbonn-wayland-git
 
 at
+jq
 fzf
 timg
 tldr
@@ -30,9 +31,9 @@ chromium
 darktable
 virt-manager
 
-vulkan-radeon
+grim 
+grimshot
 
-jq
 wget
 curl
 nmap
