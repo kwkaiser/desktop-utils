@@ -47,9 +47,9 @@ function get-terminal () {
 }
 
 function check-dependencies () {
-    if [[ ! $(command -v fzf) || ! $(command -v timg) ]];
+    if [[ ! $(command -v fzf) || ! $(command -v timg) || ! $(command -v xsettingsd) ]];
     then 
-        printf '%s\n%s\n%s\n' 'This script expects' '-    fzf' '-    timg'
+        printf '%s\n%s\n%s\n%s\n' 'This script expects' '-    fzf' '-    timg' '-    xsettingsd'
         exit 1
     fi
 
@@ -326,7 +326,14 @@ function reload-term () {
 
 function reload-sway () {
     swaymsg 'reload' 
-} 
+}
+
+function reload-gtk () {
+    local tmp=$(mktemp)
+    echo 'Net/ThemeName "flatcolor"' >> ${tmp}
+    timeout 0.2s xsettingsd -c ${tmp}  &> /dev/null
+    rm ${tmp}
+}
 
 ######################
 # Main functionality #
@@ -378,6 +385,7 @@ function main () {
 
         reload-term
         reload-sway
+        reload-gtk
 
         APPLIED='true'
     fi
