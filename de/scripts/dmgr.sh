@@ -331,7 +331,7 @@ function reload-sway () {
 function reload-gtk () {
     local tmp=$(mktemp)
     echo 'Net/ThemeName "flatcolor"' >> ${tmp}
-    timeout 0.2s xsettingsd -c ${tmp}  &> /dev/null
+    timeout 1.0s xsettingsd -c ${tmp}  &> /dev/null
     rm ${tmp}
 }
 

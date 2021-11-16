@@ -15,12 +15,12 @@
 @define-color color13 $color13;
 @define-color color14 $color14;
 @define-color color15 $color15;
-@define-color selected_bg_color $color1;
+@define-color selected_bg_color $color8;
 @define-color bg_color mix(@color0, @color15, 0.12);
 @define-color tooltip_bg_color mix(@color0, @color15, 0.04);
 @define-color base_color mix(@color0, @color15, 0);
 @define-color fg_color @color15;
-@define-color text_color @color15;
+@define-color text_color @color15color5;
 @define-color selected_fg_color @color15;
 @define-color tooltip_fg_color @color15;
 
