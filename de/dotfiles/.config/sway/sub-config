@@ -2,6 +2,10 @@
 # INIT #
 ########
 
+# Cleanup folder structures I don't like >:(
+exec rm -rf ~/Downloads
+exec rm -rf ~/Documents
+
 exec dunst 
 exec gammastep 
 exec blueman-applet
@@ -48,6 +52,8 @@ title_align center
 # EXCITING HOTKEY #
 ###################
 
+bindsym $mod+t exec 'kitty ranger'
+bindsym $mod+Shift+t exec 'kitty dmgr -i'
 bindsym $mod+Shift+d exec 'source ~/.bashrc && rofi -show drun'
 bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -b rofi'
 

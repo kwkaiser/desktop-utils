@@ -5,6 +5,8 @@ sway-git
 gammastep
 xsettingsd
 lxappearance
+qt5-styleplugins
+gtk-engine-murrine
 ttf-nerd-fonts-symbols
 
 dunst
