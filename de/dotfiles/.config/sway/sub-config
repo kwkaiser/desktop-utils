@@ -2,8 +2,10 @@
 # INIT #
 ########
 
+exec dunst 
 exec gammastep 
 exec blueman-applet
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 ########
 # BASE #
@@ -40,13 +42,14 @@ client.placeholder      #000000 #0c0c0c     #ffffff     #000000   #0c0c0c
 
 default_border pixel 2 
 titlebar_border_thickness 1
+title_align center
 
 ###################
 # EXCITING HOTKEY #
 ###################
 
-bindsym $mod+Shift+d exec rofi -show run
-bindsym $mod+Shift+p exec tessen -b rofi
+bindsym $mod+Shift+d exec 'source ~/.bashrc && rofi -show drun'
+bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -b rofi'
 
 bindcode 76 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindcode 95 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
@@ -148,6 +151,12 @@ workspace 7 output DP-2
 workspace 8 output DP-2 
 workspace 9 output DP-2 
 workspace 10 output DP-2 
+
+#######################
+# CUSTOM WINDOW RULES #
+#######################
+
+for_window [app_id="pinentry-qt"] floating enable
 
 ###########
 # OUTPUTS #

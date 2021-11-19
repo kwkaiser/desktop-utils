@@ -7,8 +7,10 @@ xsettingsd
 lxappearance
 ttf-nerd-fonts-symbols
 
-gtk4
-gtk3
+dunst
+
 gtk2
+gtk3
+gtk4
 qt5-base
 qt6-base

@@ -1,7 +1,7 @@
 configuration {
     modi: "drun";
     font: "Hack 10";
-    display-drun:  "";
+    display-drun:  "Run";
     sidebar-mode: false;
 }
 

@@ -63,6 +63,15 @@ function parse-args-template () {
     done
 }
 
+function script-usage-template () {
+    cat << EOF
+
+Script usage description 
+Usage:
+    -h | --help         Print this output
+EOF
+}
+
 #############
 # Sys utils #	
 #############

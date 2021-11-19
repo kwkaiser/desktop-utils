@@ -17,7 +17,6 @@ ranger
 neofetch
 arch-install-scripts
 
-gparted
 android-tools
 
 qtpass
@@ -39,8 +38,15 @@ curl
 nmap
 rsync
 openssh 
+openconnect
 
 qemu
 docker
+dnsmasq
 libvirt
+ebtables
+edk2-ovmf
+iptables-nft
+bridge-utils
+docker-compose
 visual-studio-code-bin
