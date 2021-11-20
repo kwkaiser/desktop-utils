@@ -14,6 +14,11 @@ window#waybar {
 #workspaces button {
   background: $color8;
   color: $color15;
+  min-width: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 6px;
+  padding-bottom: 6px;
   margin-top: 8px;
   margin-left: 4px;
   margin-right: 4px;
