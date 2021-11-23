@@ -4,8 +4,8 @@
 
 alias qvirsh='virsh --connect=qemu:///system'
 alias journal="pass edit personal/journal/$(date +"%Y-%m-%d")"
+alias journaly="pass edit personal/journal/$(date --date='1 year ago' +'%Y-%m-%d')"
 alias ssc='pass edit personal/notes/people/ssc'
-alias pomo="sleep 10s && notify-send -u critical 'POMO'"
 alias ssh="kitty +kitten ssh"
 
 ############

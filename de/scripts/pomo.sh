@@ -1,3 +1,3 @@
 #! /bin/bash
 
-sleep 1200s && notify-send --urgency=critical 'POMO'
+sleep 3s && notify-send --urgency=critical 'POMO'
