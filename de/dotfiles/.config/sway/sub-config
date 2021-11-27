@@ -3,8 +3,9 @@
 ########
 
 # Cleanup folder structures I don't like >:(
-exec rm -rf ~/Downloads
-exec rm -rf ~/Documents
+exec_always rm -rf ~/Downloads
+exec_always rm -rf ~/Documents
+exec_always xrdb ~/.Xresources
 
 exec dunst 
 exec gammastep 
