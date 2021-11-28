@@ -8,6 +8,14 @@ alias journaly="pass edit personal/journal/$(date --date='1 year ago' +'%Y-%m-%d
 alias ssc='pass edit personal/notes/people/ssc'
 alias ssh="kitty +kitten ssh"
 
+################
+# Theming vars #
+################
+
+export FONT='$font'
+export BACKGROUND=$relativebackground
+export PALLETTE=$pallette
+
 ############
 # Env vars #
 ############

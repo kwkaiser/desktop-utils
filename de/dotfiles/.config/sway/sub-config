@@ -54,7 +54,12 @@ title_align center
 ###################
 
 bindsym $mod+t exec 'kitty ranger'
-bindsym $mod+Shift+t exec 'kitty dmgr -i'
+
+bindsym $mod+Up exec 'kitty dmgr -p i -b i -f i'
+bindsym $mod+Down exec 'kitty dmgr -p i -b i'
+bindsym $mod+Left exec 'kitty dmgr -p i'
+bindsym $mod+Right exec 'kitty dmgr -b i'
+
 bindsym $mod+Shift+d exec 'source ~/.bashrc && rofi -show drun'
 bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -b rofi'
 
