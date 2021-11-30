@@ -57,7 +57,7 @@ Usage:
     -h | --help         Print this output
     -u | --utils        Override desktop utils path (~/documents/desktop-utils)
 
-    -p | --pallette     Select a color pallette (default: currently applied, or random. 'i' for interactive, 'r' for random, otherwise provide relative path)
+    -p | --palette     Select a color palette (default: currently applied, or random. 'i' for interactive, 'r' for random, otherwise provide relative path)
     -b | --background   Select a background     (default: currently applied, or random. 'i' for interactive, 'r' for random, otherwise provide relative path)
     -f | --font         Select a font           (default: currently applied, or random. 'i' for interactive, 'r' for random, otherwise provide relative path)
 
@@ -72,10 +72,10 @@ EOF
 
 function source-colors () {
     # params:
-    #   - ${1}: relative path of color pallette (defaults to global pallette)
+    #   - ${1}: relative path of color palette (defaults to global palette)
 
-    cd ${RESC}/pallettes
-    source  ./${1:-"${PALLETTE}"}
+    cd ${RESC}/palettes
+    source  ./${1:-"${PALETTE}"}
 
     declare -g -A COLORS
 
@@ -115,8 +115,8 @@ function copy-resources () {
     done
 }
 
-function get-random-pallette () {
-    printf $(ls ${RESC}/pallettes| shuf -n 1)
+function get-random-palette () {
+    printf $(ls ${RESC}/palettes| shuf -n 1)
 }
 
 function get-random-background () {
@@ -124,7 +124,6 @@ function get-random-background () {
 }
 
 function get-random-font () {
-    local fonts=$(ls ${RESC}/fonts)
     local selected=$(fc-list :mono family | shuf -n 1)
 
     printf ${selected}
@@ -200,7 +199,7 @@ function substitute-params () {
     sed -i "s#\$backgroundimage#${RESC}/images/backgrounds/${BACKGROUND}#g" ${1}
 
     sed -i "s#\$font#${FONT}#g" ${1}
-    sed -i "s#\$pallette#${PALLETTE}#g" ${1}
+    sed -i "s#\$palette#${PALETTE}#g" ${1}
     sed -i "s#\$relativebackground#${BACKGROUND}#g" ${1}
 }
 
@@ -218,7 +217,7 @@ function cleanup () {
 # Output functionality #
 ########################
 
-function preview-pallette () {
+function preview-palette () {
     source-colors 
 
     local output=${1:-/dev/stdout}
@@ -236,9 +235,9 @@ function preview-background () {
 }
 
 function interactive-selection () {
-    if [[ "${2}" == 'pallette' ]];
+    if [[ "${2}" == 'palette' ]];
     then 
-        PALLETTE=${1}.txt
+        PALETTE=${1}.txt
     elif [[ "${2}" == 'background' ]];
     then 
         if [[ -f ${RESC}/images/backgrounds/${1}.jpg ]];
@@ -260,7 +259,7 @@ function interactive-selection () {
 
     source-colors
     print-centered "FONT: ${FONT}"
-    preview-pallette ${TTY}
+    preview-palette ${TTY}
     print-centered "$(repeat-char 17 '-')" 
     preview-background
 
@@ -300,13 +299,13 @@ function initialize-args () {
     export RESC=${UTILS}/de/resources
     export DOTFILES=${UTILS}/de/dotfiles
 
-    # Attempt to source background, font, and pallette
+    # Attempt to source background, font, and palette
     source ~/.bashrc
 
     # If they fail, assign at random
-    if [[ -z ${PALLETTE} ]];
+    if [[ -z ${PALETTE} ]];
     then 
-        export PALLETTE=$(get-random-pallette)
+        export PALETTE=$(get-random-palette)
     fi
 
     if [[ -z ${BACKGROUND} ]];
@@ -339,27 +338,27 @@ function parse-args () {
                 ;;
 
 
-            -p | --pallette)
+            -p | --palette)
                 if [[ "${2-}" == 'r' ]];
                 then 
-                    PALLETTE=$(get-random-pallette)
+                    PALETTE=$(get-random-palette)
                 elif [[ "${2-}" == 'i' ]];
                 then 
                     kitty-backup
-                    PALLETTE=$(
-                        for i in $(ls ${RESC}/pallettes);
+                    PALETTE=$(
+                        for i in $(ls ${RESC}/palettes);
                         do
                             echo "${i%.*}"
-                        done | fzf --ansi --preview 'interactive-selection {} pallette'
+                        done | fzf --ansi --preview 'interactive-selection {} palette'
                     )
-                    PALLETTE="${PALLETTE}.txt"
+                    PALETTE="${PALETTE}.txt"
 
                 elif [[ ! -z "${2-}" ]];
                 then
-                    PALLETTE=${2-}
+                    PALETTE=${2-}
                 else 
                     echo ''
-                    # Hope to load previous pallette from ~/.bashrc
+                    # Hope to load previous palette from ~/.bashrc
                 fi
 
                 shift
@@ -438,9 +437,9 @@ function parse-args () {
 }
 
 function check-args () {
-    if [[ -z ${PALLETTE} || ! -f ${RESC}/pallettes/${PALLETTE} ]];
+    if [[ -z ${PALETTE} || ! -f ${RESC}/palettes/${PALETTE} ]];
     then 
-        printf "No such pallette: ${PALLETTE}\n"
+        printf "No such palette: ${PALETTE}\n"
         exit 1
     fi
 
@@ -475,7 +474,7 @@ function main () {
         print-centered "$(print-header 'Basics')"
         printf '\n'
         print-centered "$(printf '%s: %s\n' 'FONT' ${FONT})"
-        print-centered "$(printf '%s: %s\n' 'PALLETTE' ${PALLETTE})"
+        print-centered "$(printf '%s: %s\n' 'PALETTE' ${PALETTE})"
         print-centered "$(printf '%s: %s\n' 'BACKGROUND' ${BACKGROUND})"
         printf '\n'
 
@@ -489,7 +488,7 @@ function main () {
         print-centered "$(print-header 'Generated colors')"
         printf '\n'
         source-colors 
-        preview-pallette
+        preview-palette
         printf '\n'
 
         print-centered "$(print-header 'Applied background')"
@@ -523,7 +522,7 @@ export -f print-header
 export -f print-centered
 
 export -f source-colors
-export -f preview-pallette
+export -f preview-palette
 export -f preview-background
 export -f interactive-selection
 

@@ -8,6 +8,7 @@ function check-dependencies () {
     fi
 }
 
+
 function main () {
     # params:
     #   - ${1}: 'up' or 'down' or 'mute'
@@ -50,7 +51,7 @@ function main () {
             local mutedvar='Unmuted'
         fi
 
-        dunstify --timeout ${timeout} --replace 10001 --appname 'Volume:' "${mutedvar}"
+        dunstify --timeout ${timeout} --replace 100001 --appname 'Volume:' "${mutedvar}"
     fi
 
 }

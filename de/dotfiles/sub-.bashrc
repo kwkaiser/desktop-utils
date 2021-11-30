@@ -20,9 +20,10 @@ export PALLETTE=$pallette
 # Env vars #
 ############
 
-export EDITOR='/usr/bin/vim'
-export QT_QPA_PLATFORMTHEME='gtk2'
 export GTK_THEME='flatcolor'
+export EDITOR='/usr/bin/vim'
+export QT_QPA_PLATFORM='wayland'
+export QT_QPA_PLATFORMTHEME='gtk2'
 
 ###############
 # Path config #

@@ -1,6 +1,6 @@
 configuration {
     modi: "drun";
-    font: "Hack 10";
+    font: "$font 10";
     display-drun:  "Run";
     sidebar-mode: false;
 }
@@ -33,7 +33,7 @@ prompt {
     border: 2px;
     border-color: @bg;
     border-radius: 7px;
-    font: "Hack 10";
+    font: "$font 10";
     padding: 0 1% 0;
 }
 
