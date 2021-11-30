@@ -1,7 +1,7 @@
 /* MAIN WINDOW */
 
 * {
-  font-family: Hack;
+  font-family: $font;
   font-size: 11px;
 }
 

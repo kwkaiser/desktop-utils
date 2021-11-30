@@ -1,0 +1,30 @@
+[global]
+title = Dunst
+class = Dunst
+follow = keyboard
+sort = true
+progress_bar = true
+
+font = $font 10 
+width = 288
+height = 108
+offset = 0x10
+corner_radius = 7
+origin = top-center
+
+alignment = center
+
+markup = no
+format = "%a\n%s\n%b\n%p"
+
+[urgency_low]
+background = "$color0"
+highlight = "$color1"
+
+[urgency_normal]
+background = "$color0"
+highlight = "$color1"
+
+[urgency_critical]
+background = "$color0"
+highlight = "$color1"

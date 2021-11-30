@@ -7,7 +7,7 @@ exec_always rm -rf ~/Downloads
 exec_always rm -rf ~/Documents
 exec_always xrdb ~/.Xresources
 
-exec dunst 
+exec dunst
 exec gammastep 
 exec blueman-applet
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
@@ -53,23 +53,27 @@ title_align center
 # EXCITING HOTKEY #
 ###################
 
-bindsym $mod+t exec 'kitty ranger'
+# See theming mode for other kinda interesting hotkey stuff
 
-bindsym $mod+Up exec 'kitty dmgr -p i -b i -f i'
-bindsym $mod+Down exec 'kitty dmgr -p i -b i'
-bindsym $mod+Left exec 'kitty dmgr -p i'
-bindsym $mod+Right exec 'kitty dmgr -b i'
+bindsym $mod+b exec 'kitty ranger'
 
 bindsym $mod+Shift+d exec 'source ~/.bashrc && rofi -show drun'
 bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -b rofi'
 
-bindcode 76 exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindcode 95 exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindcode 96 exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindcode 76 exec 'increment-volume down'
+bindcode 95 exec 'increment-volume mute'
+bindcode 96 exec 'increment-volume up'
 
-bindcode $mod+76 exec playerctl previous
-bindcode $mod+95 exec playerctl play-pause 
-bindcode $mod+96 exec playerctl next
+bindcode $mod+76 exec 'increment-volume down 1'
+bindcode $mod+96 exec 'increment-volume up 1'
+
+bindcode $mod+Shift+76 exec playerctl previous
+bindcode $mod+Shift+95 exec playerctl play-pause 
+bindcode $mod+Shift+96 exec playerctl next
+
+bindsym $mod+n exec 'dunstctl close'
+bindsym $mod+m exec 'dunstctl history-pop'
+bindsym $mod+Shift+n exec 'dunstctl close-all'
 
 #################
 # BORING HOTKEY #
@@ -134,11 +138,22 @@ mode "resize" {
     bindsym $right resize shrink width 25px
     bindsym $left resize grow width 25px
 
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym Escape mode "default"; exec "dunstify --appname Sway --replace 100002 --timeout 1000 'Normal mode'"
 }
 
-bindsym $mod+r mode "resize"
+mode "theme" {
+    bindsym p exec 'dmgr -p r'
+    bindsym $mod+p exec 'kitty dmgr -p i' 
+    bindsym b exec 'dmgr -b r'
+    bindsym $mod+b exec 'kitty dmgr -b i' 
+    bindsym f exec 'dmgr -f r'
+    bindsym $mod+f exec 'kitty dmgr -f i' 
+
+    bindsym Escape mode "default"; exec "dunstify --appname Sway --replace 100002 --timeout 1000 'Normal mode'"
+}
+
+bindsym $mod+r mode "resize"; exec "dunstify --appname Sway --replace 100002 --timeout 1000 'Resize mode'"
+bindsym $mod+t mode "theme"; exec "dunstify --appname Sway --replace 100002 --timeout 1000 'Theming mode'"
 
 #######
 # BAR #

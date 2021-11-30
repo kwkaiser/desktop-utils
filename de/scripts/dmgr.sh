@@ -238,10 +238,16 @@ function preview-background () {
 function interactive-selection () {
     if [[ "${2}" == 'pallette' ]];
     then 
-        PALLETTE=${1}
+        PALLETTE=${1}.txt
     elif [[ "${2}" == 'background' ]];
     then 
-        BACKGROUND=${1}
+        if [[ -f ${RESC}/images/backgrounds/${1}.jpg ]];
+        then
+            BACKGROUND=${1}.jpg
+        else 
+            BACKGROUND=${1}.png
+        fi
+
     elif [[ "${2}" == 'font' ]];
     then
         FONT=${1}
@@ -340,7 +346,14 @@ function parse-args () {
                 elif [[ "${2-}" == 'i' ]];
                 then 
                     kitty-backup
-                    PALLETTE=$(ls ${RESC}/pallettes | fzf --ansi --preview 'interactive-selection {} pallette')
+                    PALLETTE=$(
+                        for i in $(ls ${RESC}/pallettes);
+                        do
+                            echo "${i%.*}"
+                        done | fzf --ansi --preview 'interactive-selection {} pallette'
+                    )
+                    PALLETTE="${PALLETTE}.txt"
+
                 elif [[ ! -z "${2-}" ]];
                 then
                     PALLETTE=${2-}
@@ -359,7 +372,21 @@ function parse-args () {
                 elif [[ "${2-}" == 'i' ]];
                 then 
                     kitty-backup
-                    BACKGROUND=$(ls ${RESC}/images/backgrounds | fzf --ansi --preview 'interactive-selection {} background')
+
+                    BACKGROUND=$(
+                        for i in $(ls ${RESC}/images/backgrounds);
+                        do
+                            echo "${i%.*}"
+                        done | fzf --ansi --preview 'interactive-selection {} background'
+                    )
+
+                    if [[ -f ${RESC}/images/backgrounds/${BACKGROUND}.jpg ]];
+                    then 
+                        BACKGROUND=${BACKGROUND}.jpg
+                    else 
+                        BACKGROUND=${BACKGROUND}.png
+                    fi
+
                 elif [[ ! -z "${2-}" ]];
                 then
                     BACKGROUND=${2-}
