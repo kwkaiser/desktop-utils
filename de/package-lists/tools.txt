@@ -37,7 +37,8 @@ wget
 curl
 nmap
 rsync
-openssh 
+openssh
+freerdp 
 openconnect
 
 qemu

@@ -83,6 +83,7 @@ bindsym $mod+Shift+q kill
 
 bindsym $mod+Shift+r reload
 bindsym $mod+Return exec $terminal
+bindsym $mod++x exec 'kitty cbonsai -S'
 bindsym $mod+Shift+x exec swaylock
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Ayo bruh, you tryna dip?' -B 'Yah' 'swaymsg exit'
 
@@ -195,3 +196,4 @@ output DP-1 bg $backgroundimage fill
 output DP-2 bg $backgroundimage fill
 output DP-1 adaptive_sync on
 output DP-2 adaptive_sync on
+output DP-2 transform 90 

@@ -1,13 +1,11 @@
 {
-    "git.enableSmartCommit": true,
-    "editor.formatOnSave": true,
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },  
-    "hediet.vscode-drawio.theme": "Kennedy",
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "workbench.colorTheme": "Xresources",
-    "extensions.ignoreRecommendations": true,
-    "editor.fontFamily": "$font",
-    "editor.codeLensFontFamily": "$font"
+  "git.enableSmartCommit": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "hediet.vscode-drawio.theme": "Kennedy",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "workbench.colorTheme": "Xresources",
+  "extensions.ignoreRecommendations": true,
+  "editor.fontFamily": "$font",
+  "editor.codeLensFontFamily": "$font"
 }
