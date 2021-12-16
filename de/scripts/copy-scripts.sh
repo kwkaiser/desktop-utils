@@ -5,7 +5,7 @@ then
     echo 'This script must be run as root'
     exit 1
 else 
-    declare -a scripts=( 'pomo.sh' 'dmgr.sh' 'increment-volume.sh' 'recipes.sh' )
+    declare -a scripts=( 'pomo.sh' 'dmgr.sh' 'increment-volume.sh' 'recipes.sh' 'init-audio.sh' 'init-coms.sh' 'init-work.sh')
 
     declare -a sscripts=( 'mountbox.sh' 'umountbox.sh' )
 

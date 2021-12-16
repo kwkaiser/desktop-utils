@@ -47,9 +47,22 @@ function main () {
             done | fzf 
         )
 
+        if [[ -z ${recipe} ]];
+        then 
+            printf 'No recipe selected\n'
+            exit 1
+        fi
+
         pass edit personal/notes/recipes/${recipe}
 
     else
+
+        if [[ -z ${1} ]];
+        then 
+            printf 'No recipe selected\n'
+            exit 1
+        fi
+
         pass edit personal/notes/recipes/${1}
     fi
 }
