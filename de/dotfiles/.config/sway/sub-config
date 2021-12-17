@@ -6,8 +6,8 @@
 exec_always rm -rf ~/Downloads
 exec_always rm -rf ~/Documents
 exec_always xrdb ~/.Xresources
+exec_always relaunch-dunst 
 
-exec dunst
 exec gammastep 
 exec blueman-applet
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
@@ -143,11 +143,11 @@ mode "resize" {
 }
 
 mode "theme" {
-    bindsym p exec 'dmgr -p r'
+    bindsym $mod+Shift+p exec 'dmgr -p r'
     bindsym $mod+p exec 'kitty dmgr -p i' 
-    bindsym b exec 'dmgr -b r'
+    bindsym $mod+Shift+b exec 'dmgr -b r'
     bindsym $mod+b exec 'kitty dmgr -b i' 
-    bindsym f exec 'dmgr -f r'
+    bindsym $mod+Shift+f exec 'dmgr -f r'
     bindsym $mod+f exec 'kitty dmgr -f i' 
 
     bindsym Escape mode "default"; exec "dunstify --appname Sway --replace 100002 --timeout 1000 'Normal mode'"
