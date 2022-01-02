@@ -5,11 +5,8 @@
 alias k='kubectl'
 alias docker-rm-all='docker container rm $(docker ps -a -q)'
 alias docker-stop-all='docker container stop $(docker ps -a -q)'
-alias food='pass edit personal/notes/food'
 alias qvirsh='virsh --connect=qemu:///system'
 alias journal="pass edit personal/journal/$(date +"%Y-%m-%d")"
-alias journaly="pass edit personal/journal/$(date --date='1 year ago' +'%Y-%m-%d')"
-alias ssc='pass edit personal/notes/people/ssc'
 alias ssh="kitty +kitten ssh"
 
 ################

@@ -13,7 +13,7 @@ function parse-args () {
                 ;;
 
             -?*) 
-                local test='test'
+                script-usage
                 exit 1
                 ;;
             *) 
@@ -40,30 +40,42 @@ function main () {
 
     if [[ "${SEARCHING}" == 'true' ]];
     then 
-        local recipe=$(
-            for i in $(ls ${HOME}/.password-store/personal/notes/recipes);
+        local note=$(
+            for i in $(find ${HOME}/.password-store/personal/notes -type f);
             do
-                echo "${i%.*}"
+
+                local cleanname=$(basename ${i})
+                local nextdir=$(dirname ${i})
+                local relative=$(basename ${nextdir})
+
+                while [[ "$(realpath ${nextdir})" != "${HOME}/.password-store/personal/notes" ]];
+                do
+                    nextdir=$(dirname ${nextdir})
+                    relative=$(basename ${nextdir})/${relative}
+                done
+
+                local truename=$(printf ${relative} | cut -c6-)/${cleanname} 
+
+                echo "${truename%.*}"
             done | fzf 
         )
 
-        if [[ -z ${recipe} ]];
+        if [[ -z ${note} ]];
         then 
-            printf 'No recipe selected\n'
+            printf 'No note selected\n'
             exit 1
         fi
 
-        pass edit personal/notes/recipes/${recipe}
-
+        pass edit personal/notes/${note}
     else
 
         if [[ -z ${1} ]];
         then 
-            printf 'No recipe selected\n'
+            printf 'No note selected\n'
             exit 1
         fi
 
-        pass edit personal/notes/recipes/${1}
+        pass edit personal/notes/${1}
     fi
 }
 
