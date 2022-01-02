@@ -1,6 +1,6 @@
 pipewire 
 pipewire-alsa
-pipewire-pulseaudio
+pipewire-pulse
 
 bluez
 blueman
@@ -8,3 +8,4 @@ bluez-utils
 
 playerctl
 pavucontrol
+

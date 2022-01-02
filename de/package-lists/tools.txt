@@ -47,7 +47,7 @@ dnsmasq
 libvirt
 ebtables
 edk2-ovmf
-iptables-nft
 bridge-utils
 docker-compose
 visual-studio-code-bin
+

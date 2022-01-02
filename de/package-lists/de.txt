@@ -1,7 +1,7 @@
+sway
 waybar
 swayidle
 swaylock
-sway-git
 gammastep
 xsettingsd
 lxappearance
@@ -17,3 +17,4 @@ gtk3
 gtk4
 qt5-base
 qt6-base
+
