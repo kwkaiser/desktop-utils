@@ -4,22 +4,11 @@
     "height": 40,
     "layer": "top",
     "position": "top",
-    "modules-left": [],
-    "modules-center": [
-      "sway/workspaces"
-    ],
-    "modules-right": []
-  },
-  {
-    "output": "eDP-1",
-    "height": 40,
-    "layer": "top",
-    "position": "bottom",
     "modules-left": [
       "cpu"
     ],
     "modules-center": [
-      "battery"
+      "sway/workspaces"
     ],
     "modules-right": [
       "memory"
@@ -32,6 +21,25 @@
       "interval": 30,
       "format": " {}%",
       "max-length": 10
+    }
+  },
+  {
+    "output": "eDP-1",
+    "height": 40,
+    "layer": "top",
+    "position": "bottom",
+    "modules-left": [
+      "network"
+    ],
+    "modules-center": [
+      "clock"
+    ],
+    "modules-right": [
+      "battery"
+    ],
+    "clock": {
+      "interval": 1,
+      "format": "{:%H:%M:%S}"
     },
     "battery": {
       "interval": 60,
@@ -48,6 +56,14 @@
         ""
       ],
       "max-length": 25
+    },
+    "network": {
+      "interval": 1,
+      "interface": "wlp58s0",
+      "format": "{ifname}",
+      "format-wifi": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",
+      "format-ethernet": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",
+      "format-disconnected": "disconnected"
     }
   }
 ]

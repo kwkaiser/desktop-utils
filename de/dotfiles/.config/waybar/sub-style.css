@@ -54,9 +54,19 @@ window#waybar {
   min-width: 60px;
   padding-left: 32px;
   padding-right: 32px;
-  margin-bottom: 8px;
   margin-left: 8px;
   margin-right: 8px;
+}
+
+#cpu,
+#memory {
+  margin-top: 8px;
+}
+
+#network,
+#battery,
+#clock {
+  margin-bottom: 8px;
 }
 
 #network {
