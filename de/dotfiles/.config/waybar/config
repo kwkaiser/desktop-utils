@@ -1,6 +1,6 @@
 [
   {
-    "output": "eDP-1",
+    "output": "DP-1",
     "height": 40,
     "layer": "top",
     "position": "top",
@@ -11,7 +11,7 @@
     "modules-right": []
   },
   {
-    "output": "eDP-1",
+    "output": "DP-1",
     "height": 40,
     "layer": "top",
     "position": "bottom",
@@ -19,7 +19,7 @@
       "cpu"
     ],
     "modules-center": [
-      "battery"
+      "clock"
     ],
     "modules-right": [
       "memory"
@@ -28,26 +28,57 @@
       "interval": 10,
       "format": "龍 {}%"
     },
+    "clock": {
+      "interval": 1,
+      "format": "{:%H:%M:%S}"
+    },
     "memory": {
       "interval": 30,
       "format": " {}%",
       "max-length": 10
+    }
+  },
+  {
+    "output": "DP-2",
+    "height": 40,
+    "layer": "top",
+    "position": "top",
+    "modules-left": [],
+    "modules-center": [
+      "sway/workspaces#2"
+    ],
+    "modules-right": []
+  },
+  {
+    "output": "DP-2",
+    "height": 40,
+    "layer": "top",
+    "position": "bottom",
+    "modules-left": [
+      "network"
+    ],
+    "modules-center": [
+      "clock#2"
+    ],
+    "modules-right": [
+      "disk"
+    ],
+    "clock#2": {
+      "interval": 1,
+      "format": "{:%Y-%m-%d}"
     },
-    "battery": {
-      "interval": 60,
-      "states": {
-        "warning": 30,
-        "critical": 15
-      },
-      "format": "{capacity}% {icon}",
-      "format-icons": [
-        "",
-        "",
-        "",
-        "",
-        ""
-      ],
-      "max-length": 25
+    "network": {
+      "interval": 1,
+      "interface": "wlp6s0",
+      "format": "{ifname}",
+      "format-wifi": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",
+      "format-ethernet": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",
+      "format-disconnected": "disconnected"
+    },
+    "disk": {
+      "interval": 120,
+      "format": " {percentage_used}%",
+      "path": "/"
     }
   }
 ]
