@@ -7,5 +7,6 @@
   "workbench.colorTheme": "Xresources",
   "extensions.ignoreRecommendations": true,
   "editor.fontFamily": "$font",
-  "editor.codeLensFontFamily": "$font"
+  "editor.codeLensFontFamily": "$font",
+  "disable-hardware-acceleration": true
 }

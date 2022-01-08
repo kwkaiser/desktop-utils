@@ -3,6 +3,7 @@ waybar
 swayidle
 swaylock
 gammastep
+xorg-xhost
 xsettingsd
 lxappearance
 qt5-styleplugins

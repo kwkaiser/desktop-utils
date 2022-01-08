@@ -5,6 +5,7 @@ rofi-lbonn-wayland-git
 
 at
 jq
+zip
 fzf
 timg
 tldr
