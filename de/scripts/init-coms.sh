@@ -1,10 +1,10 @@
 #! /bin/bash
 
 swaymsg 'workspace 9'
-swaymsg 'splitv'
+swaymsg 'splith'
 
 caprine  & 
 sleep 2s &&
 discord
 
-swaymsg 'splith'
+swaymsg 'layout tabbed'
