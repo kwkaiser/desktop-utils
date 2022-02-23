@@ -23,11 +23,12 @@ function parse-args () {
     done
 }
 
-function script-usage-() {
+function script-usage () {
     cat << EOF
 
 Script usage description 
 Usage:
+    notes [note name]
     -h | --help         Print this output
     -s | --search       Search existing recipes
 EOF

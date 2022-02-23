@@ -1,5 +1,6 @@
 sway
 waybar
+wmname
 swayidle
 swaylock
 gammastep

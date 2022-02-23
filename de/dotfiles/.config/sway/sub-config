@@ -9,6 +9,7 @@ exec_always xrdb ~/.Xresources
 exec_always relaunch-dunst 
 
 exec gammastep 
+exec wmnam compiz
 exec blueman-applet
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
@@ -58,7 +59,7 @@ title_align center
 bindsym $mod+b exec 'kitty ranger'
 
 bindsym $mod+Shift+d exec 'source ~/.bashrc && rofi -show drun'
-bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -b rofi'
+bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -d rofi'
 
 bindcode 76 exec 'increment-volume down'
 bindcode 95 exec 'increment-volume mute'
@@ -75,6 +76,9 @@ bindsym $mod+n exec 'dunstctl close'
 bindsym $mod+m exec 'dunstctl history-pop'
 bindsym $mod+Shift+n exec 'dunstctl close-all'
 
+bindsym $mod+c exec 'grimshot copy area'
+bindsym $mod+Shift+c exec "/bin/bash -c 'grimshot save area ~/photos/screenshots/$(date -u +"%Y-%m-%dT%H:%M:%SZ").png'"
+
 #################
 # BORING HOTKEY #
 #################
@@ -83,7 +87,7 @@ bindsym $mod+Shift+q kill
 
 bindsym $mod+Shift+r reload
 bindsym $mod+Return exec $terminal
-bindsym $mod++x exec 'kitty cbonsai -S'
+bindsym $mod+x exec 'kitty cbonsai -S'
 bindsym $mod+Shift+x exec swaylock
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Ayo bruh, you tryna dip?' -B 'Yah' 'swaymsg exit'
 
