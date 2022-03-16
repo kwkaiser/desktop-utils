@@ -25,6 +25,7 @@ export GTK_THEME='flatcolor'
 export EDITOR='/usr/bin/vim'
 export QT_QPA_PLATFORM='wayland'
 export QT_QPA_PLATFORMTHEME='gtk2'
+export XDG_CURRENT_DESKTOP='sway'
 
 ###############
 # Path config #
