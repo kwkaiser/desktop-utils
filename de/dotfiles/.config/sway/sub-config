@@ -173,17 +173,17 @@ bar {
 # WORKSPACE ASSIGNMENT #
 ########################
 
-workspace 1 output DP-1 
-workspace 2 output DP-1 
-workspace 3 output DP-1 
-workspace 3 output DP-1 
-workspace 4 output DP-1 
-workspace 5 output DP-1 
-workspace 6 output DP-2 
-workspace 7 output DP-2 
-workspace 8 output DP-2 
-workspace 9 output DP-2 
-workspace 10 output DP-2 
+workspace 1 output eDP-1 
+workspace 2 output eDP-1 
+workspace 3 output eDP-1 
+workspace 3 output eDP-1 
+workspace 4 output eDP-1 
+workspace 5 output eDP-1 
+workspace 6 output eDP-1 
+workspace 7 output eDP-1 
+workspace 8 output eDP-1 
+workspace 9 output eDP-1 
+workspace 10 output eDP-1 
 
 #######################
 # CUSTOM WINDOW RULES #
@@ -195,10 +195,5 @@ for_window [app_id="pinentry-qt"] floating enable
 # OUTPUTS #
 ###########
 
-output DP-1 pos 0 0 res 1920x1080@143Hz
-output DP-2 pos 1920 0 res 1920x1080@143Hz
-output DP-1 bg $backgroundimage fill
-output DP-2 bg $backgroundimage fill
-output DP-1 adaptive_sync on
-output DP-2 adaptive_sync on
-output DP-2 transform 90 
+output eDP-1 pos 0 0 res 1920x1080
+output eDP-1 bg $backgroundimage fill
