@@ -28,9 +28,9 @@ function script-usage () {
 
 Script usage description 
 Usage:
-    notes [note name]
+    journal 
     -h | --help         Print this output
-    -s | --search       Search existing recipes
+    -s | --search       Search existing journal entries
 EOF
 
     exit 1
@@ -41,42 +41,35 @@ function main () {
 
     if [[ "${SEARCHING}" == 'true' ]];
     then 
-        local note=$(
-            for i in $(find ${HOME}/.password-store/personal/notes -type f);
+        local entry=$(
+            for i in $(find ${HOME}/.password-store/personal/journal -type f);
             do
 
                 local cleanname=$(basename ${i})
                 local nextdir=$(dirname ${i})
                 local relative=$(basename ${nextdir})
 
-                while [[ "$(realpath ${nextdir})" != "${HOME}/.password-store/personal/notes" ]];
+                while [[ "$(realpath ${nextdir})" != "${HOME}/.password-store/personal/journal" ]];
                 do
                     nextdir=$(dirname ${nextdir})
                     relative=$(basename ${nextdir})/${relative}
                 done
 
-                local truename=$(printf ${relative} | cut -c6-)/${cleanname} 
+                local truename=$(printf ${relative} | cut -c10-)/${cleanname} 
 
                 echo "${truename%.*}"
             done | fzf 
         )
 
-        if [[ -z ${note} ]];
+        if [[ -z ${entry} ]];
         then 
-            printf 'No note selected\n'
+            printf 'No journal entry selected\n'
             exit 1
         fi
 
-        pass edit personal/notes/${note}
+        pass edit personal/journal/${entry}
     else
-
-        if [[ -z ${1} ]];
-        then 
-            printf 'No note selected\n'
-            exit 1
-        fi
-
-        pass edit personal/notes/${1}
+        pass edit personal/journal/$(date +"%Y-%m-%d")
     fi
 }
 

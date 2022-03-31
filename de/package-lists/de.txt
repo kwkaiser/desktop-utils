@@ -1,8 +1,10 @@
 sway
 waybar
+wmname
 swayidle
 swaylock
 gammastep
+xorg-xhost
 xsettingsd
 lxappearance
 qt5-styleplugins
@@ -17,4 +19,4 @@ gtk3
 gtk4
 qt5-base
 qt6-base
-qt5-wayland
+

@@ -1,6 +1,6 @@
 [
   {
-    "output": "eDP-1",
+    "output": "DP-1",
     "height": 40,
     "layer": "top",
     "position": "top",
@@ -16,6 +16,10 @@
     "cpu": {
       "interval": 10,
       "format": "龍 {}%"
+    },
+    "clock": {
+      "interval": 1,
+      "format": "{:%H:%M:%S}"
     },
     "memory": {
       "interval": 30,

@@ -2,12 +2,14 @@
 
 swaymsg 'workspace 10'
 
-swaymsg 'splith'
+swaymsg 'splitv'
 spotify & sleep 1s
 
 
 pavucontrol &  sleep 1s
 # 
-swaymsg 'splitv'
+swaymsg 'splith'
 
 blueman-manager &
+
+swaymsg 'layout tabbed'
