@@ -195,10 +195,10 @@ for_window [app_id="pinentry-qt"] floating enable
 # OUTPUTS #
 ###########
 
-output DP-1 pos 0 0 res 1920x1080@143Hz
-output DP-2 pos 1920 0 res 1920x1080@143Hz
+output DP-1 pos 0 0 res 1920x1080@60Hz
+output DP-2 pos 1920 0 res 1920x1080@60hz
 output DP-1 bg $backgroundimage fill
 output DP-2 bg $backgroundimage fill
 output DP-1 adaptive_sync on
 output DP-2 adaptive_sync on
-output DP-2 transform 90 
+output DP-2 transform 270 

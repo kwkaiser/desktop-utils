@@ -69,7 +69,7 @@
     },
     "network": {
       "interval": 1,
-      "interface": "wlp6s0",
+      "interface": "eno1",
       "format": "{ifname}",
       "format-wifi": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",
       "format-ethernet": " {ipaddr}    {bandwidthUpBits}  |  {bandwidthDownBits}",

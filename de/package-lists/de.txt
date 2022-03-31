@@ -19,4 +19,8 @@ gtk3
 gtk4
 qt5-base
 qt6-base
+qt5-wayland
+
+wl-type
+wl-clipboard
 
