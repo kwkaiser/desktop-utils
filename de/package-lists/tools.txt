@@ -52,3 +52,8 @@ bridge-utils
 docker-compose
 visual-studio-code-bin
 
+texlive-core
+tllocalmgr-git
+
+syncthing
+hashcat

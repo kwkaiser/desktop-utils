@@ -12,6 +12,7 @@ exec gammastep
 exec wmnam compiz
 exec blueman-applet
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec /bin/bash -c "syncthing --no-browser &"
 exec systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 
 ########
