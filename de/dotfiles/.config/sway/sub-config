@@ -59,6 +59,8 @@ title_align center
 # See theming mode for other kinda interesting hotkey stuff
 
 bindsym $mod+b exec 'kitty ranger'
+bindsym $mod+Shift+b exec 'obsidian'
+bindsym $mod+x exec 'kitty cbonsai -S'
 
 bindsym $mod+Shift+d exec 'source ~/.bashrc && rofi -show drun'
 bindsym $mod+Shift+p exec 'source ~/.bashrc && tessen -d rofi'
@@ -89,7 +91,6 @@ bindsym $mod+Shift+q kill
 
 bindsym $mod+Shift+r reload
 bindsym $mod+Return exec $terminal
-bindsym $mod+x exec 'kitty cbonsai -S'
 bindsym $mod+Shift+x exec swaylock
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Ayo bruh, you tryna dip?' -B 'Yah' 'swaymsg exit'
 
